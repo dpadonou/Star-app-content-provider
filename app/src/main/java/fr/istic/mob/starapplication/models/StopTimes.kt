@@ -34,4 +34,6 @@ class StopTimes {
         this.stopId = stopId
         this.stopSequence = stopSequence
     }
+
+    constructor()
 }

@@ -2,6 +2,7 @@ package fr.istic.mob.starapplication.dao
 
 import android.database.Cursor
 import androidx.room.*
+import fr.istic.mob.starapplication.models.Calendar
 import fr.istic.mob.starapplication.models.StopTimes
 import fr.istic.mob.starapplication.models.Trips
 
@@ -9,10 +10,14 @@ import fr.istic.mob.starapplication.models.Trips
 interface TripsDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrips(t: Trips)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAllTrips(trips:ArrayList<Trips>)
     @Update
     fun updateTrips(t:Trips)
     @Delete
     fun deleteTrips(t:Trips)
+    @Query("DELETE FROM Trips")
+    fun deleteAllTrips()
     @Query("SELECT * FROM Trips")
     fun getAllTrips(): Cursor
     @Query("SELECT * FROM Trips WHERE id=:id")

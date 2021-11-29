@@ -50,4 +50,6 @@ class Calendar {
         this.startDate = startDate
         this.endDate = endDate
     }
+
+    constructor()
 }

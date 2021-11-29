@@ -69,9 +69,9 @@ class DownloadZip(var context:Context,var application: Application) {
                     progressBarProgress = 100
                     alertDialog.dismiss()
                     val e = ExtractFile(context)
+                    val f = FillDatabase(context, application)
                     val target = Utils(context).directoryPath+Utils(context).separator+Utils(context).zipName
                     e.extract(target,Utils(context).directoryPath)
-                    val f = FillDatabase(context, application)
                     f.fillDatabase()
                     println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
                     println("Download success full")

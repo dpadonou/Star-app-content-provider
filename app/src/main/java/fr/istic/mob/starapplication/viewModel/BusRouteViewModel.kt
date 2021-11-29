@@ -25,10 +25,14 @@ class BusRouteViewModel(application: Application): AndroidViewModel(application)
             repository.addBusRoute(busRoutes)
         }
     }
-    fun addAllBusRoute(busRoutes: ArrayList<BusRoutes>){
+    suspend fun addAllBusRoute(busRoutes: ArrayList<BusRoutes>){
             viewModelScope.launch(Dispatchers.IO) {
                 repository.addAllBusRoutes(busRoutes)
             }
-
+    }
+    fun deleteAllBusRoutes(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllBusRoutes()
+        }
     }
 }
