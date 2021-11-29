@@ -8,5 +8,5 @@ class Utils(var context: Context) {
      val directoryPath = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString()+ "/StarDP"
      val separator = "/"
      val zipName = "content.zip"
-
+     val files = arrayOf("routes.txt","calendar.txt","trips.txt","stops.txt","stop_times.txt")
 }

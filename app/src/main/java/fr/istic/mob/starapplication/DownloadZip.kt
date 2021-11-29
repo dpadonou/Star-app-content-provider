@@ -1,5 +1,6 @@
 package fr.istic.mob.starapplication
 
+import android.app.Application
 import android.app.Dialog
 import android.content.Context
 import android.os.Build
@@ -13,7 +14,7 @@ import com.downloader.PRDownloaderConfig
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class DownloadZip(var context:Context) {
+class DownloadZip(var context:Context,var application: Application) {
     var progressBarMax: Int = 100
     var progressBarProgress: Int = 0
     //var progression:Progression = Progression(context)
@@ -67,9 +68,11 @@ class DownloadZip(var context:Context) {
                     progressBarMax = 100
                     progressBarProgress = 100
                     alertDialog.dismiss()
-                    val e = ExtractFile()
-                    val path2 = Utils(context).directoryPath+Utils(context).separator+Utils(context).zipName
-                    e.extract(Utils(context).directoryPath,path2)
+                    val e = ExtractFile(context)
+                    val target = Utils(context).directoryPath+Utils(context).separator+Utils(context).zipName
+                    e.extract(target,Utils(context).directoryPath)
+                    val f = FillDatabase(context, application)
+                    f.fillDatabase()
                     println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
                     println("Download success full")
                 }

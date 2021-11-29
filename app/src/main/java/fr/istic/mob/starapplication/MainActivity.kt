@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import androidx.annotation.RequiresApi
 
 
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         if(intent.extras != null){
             val link = intent.extras!!.getString("link")
             val path = intent.extras!!.getString("path")
-            val d = DownloadZip(this)
+            val d = DownloadZip(this,application)
             d.downloadZip(link.toString(),Utils(this).zipName,path.toString())
         }
 

@@ -8,10 +8,14 @@ import fr.istic.mob.starapplication.models.BusRoutes
 interface BusRoutesDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertBusRoutes(b:BusRoutes)
+    @Insert
+    suspend fun insertAllBusRoutes(l:ArrayList<BusRoutes>)
     @Update
     fun updateBusRoutes(b:BusRoutes)
     @Delete
     fun deleteBusRoutes(b:BusRoutes)
+    @Query("DELETE FROM BusRoutes")
+    fun deleteAllBusRoutes()
     @Query("SELECT * FROM BusRoutes")
     fun getAllBusRoutes():Cursor
     @Query("SELECT * FROM BusRoutes WHERE _id=:id")
