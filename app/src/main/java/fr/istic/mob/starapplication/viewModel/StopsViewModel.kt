@@ -5,6 +5,7 @@ import android.database.Cursor
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import fr.istic.mob.starapplication.database.StarDatabase
+import fr.istic.mob.starapplication.models.BusRoutes
 import fr.istic.mob.starapplication.models.Stops
 import fr.istic.mob.starapplication.repositories.StopsRepository
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,15 @@ class StopsViewModel(application: Application):AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addStops(s)
         }
-
+    }
+    suspend fun addAllBStops(stops: ArrayList<Stops>){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addAllStops(stops)
+        }
+    }
+    fun deleteAllStops(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllStops()
+        }
     }
 }

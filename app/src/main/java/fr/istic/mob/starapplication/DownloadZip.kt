@@ -14,15 +14,14 @@ import com.downloader.PRDownloaderConfig
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class DownloadZip(var context: Context, var application: Application) {
+class DownloadZip(var context:Context,var application: Application) {
     var progressBarMax: Int = 100
     var progressBarProgress: Int = 0
-
     //var progression:Progression = Progression(context)
-    var alertDialog = Dialog(context)
-    private lateinit var input: ProgressBar
-    private lateinit var textView: TextView
-    private lateinit var textView2: TextView
+    var  alertDialog = Dialog(context)
+    private lateinit var input:ProgressBar
+    private lateinit var textView:TextView
+    private lateinit var textView2:TextView
 
     init {
         alertDialog.setCancelable(false)
@@ -42,25 +41,25 @@ class DownloadZip(var context: Context, var application: Application) {
 
     //Telecharge le fichier
     @RequiresApi(Build.VERSION_CODES.N)
-    fun downloadZip(url: String, fileName: String, path: String) {
-        textView2.text = "Telechargement des fichiers"
+    fun downloadZip(url: String, fileName: String, path: String){
+        textView2.setText("Telechargement des fichiers")
         /** Telechargement ....*/
         PRDownloader.download(
             url,
             path,
             fileName
         ).build()
-            /** Suivre la progression **/
-            .setOnProgressListener {
+                /** Suivre la progression **/
+            .setOnProgressListener{
                 progressBarMax = it.totalBytes.toInt()
                 progressBarProgress = it.currentBytes.toInt()
-                // val d1 = Math.floorDiv( progressBarProgress,progressBarMax )
-                input.max = progressBarMax
-                input.progress = progressBarProgress
-                // val q: Int = 2/5
-                val d = (input.progress.toDouble() / input.max.toDouble()) * 100
+               // val d1 = Math.floorDiv( progressBarProgress,progressBarMax )
+                 input.max = progressBarMax
+                input.progress =progressBarProgress
+               // val q: Int = 2/5
+                val d = (input.progress.toDouble()/input.max.toDouble())*100
                 val d1 = BigDecimal(d).setScale(2, RoundingMode.HALF_EVEN)
-                textView.text = "$d1%"
+                textView.setText("$d1%")
                 println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
 
             }
@@ -70,10 +69,9 @@ class DownloadZip(var context: Context, var application: Application) {
                     progressBarProgress = 100
                     alertDialog.dismiss()
                     val e = ExtractFile(context)
-                    val target =
-                        Utils(context).directoryPath + Utils(context).separator + Utils(context).zipName
-                    e.extract(target, Utils(context).directoryPath)
                     val f = FillDatabase(context, application)
+                    val target = Utils(context).directoryPath+Utils(context).separator+Utils(context).zipName
+                    e.extract(target,Utils(context).directoryPath)
                     f.fillDatabase()
                     println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
                     println("Download success full")
@@ -81,7 +79,7 @@ class DownloadZip(var context: Context, var application: Application) {
 
                 override fun onError(error: com.downloader.Error?) {
                     print("Failed to download the $url")
-                    Log.i("", "Erreur du telechargement")
+                    Log.i("","Erreur du telechargement")
                 }
             })
         alertDialog.show()

@@ -12,4 +12,8 @@ class BusRouteRepository(private val busRoutesDAO: BusRoutesDAO) {
     suspend fun addAllBusRoutes(l:ArrayList<BusRoutes>){
          busRoutesDAO.insertAllBusRoutes(l)
     }
+
+    fun deleteAllBusRoutes(){
+        busRoutesDAO.deleteAllBusRoutes()
+    }
 }

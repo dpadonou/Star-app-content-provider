@@ -34,4 +34,6 @@ class Stops {
         this.longitutde = longitutde
         this.wheelChairBoarding = wheelChairBoarding
     }
+
+    constructor()
 }

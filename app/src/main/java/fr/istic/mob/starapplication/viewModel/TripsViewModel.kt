@@ -5,6 +5,7 @@ import android.database.Cursor
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import fr.istic.mob.starapplication.database.StarDatabase
+import fr.istic.mob.starapplication.models.BusRoutes
 import fr.istic.mob.starapplication.models.Trips
 import fr.istic.mob.starapplication.repositories.TripsRepository
 import kotlinx.coroutines.Dispatchers
@@ -25,5 +26,15 @@ class TripsViewModel(application: Application):AndroidViewModel(application) {
             repository.addTrips(t)
         }
 
+    }
+    suspend fun addAllTrips(trips: ArrayList<Trips>){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addAllTrips(trips)
+        }
+    }
+    fun deleteAllTrips(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllTrips()
+        }
     }
 }

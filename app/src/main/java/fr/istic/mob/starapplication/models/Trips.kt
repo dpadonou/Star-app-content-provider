@@ -38,4 +38,6 @@ class Trips {
         this.blockId = blockId
         this.wheelChairAccessible = wheelChairAccessible
     }
+
+    constructor()
 }
