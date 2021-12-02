@@ -8,6 +8,24 @@ class BusRoutes {
     @PrimaryKey(autoGenerate = true)
     private var id: Int = 0
 
+    constructor(
+        id: Int,
+        shortName: String,
+        longName: String,
+        description: String,
+        type: String,
+        color: String,
+        textColor: String
+    ) {
+        this.id = id
+        this.shortName = shortName
+        this.longName = longName
+        this.description = description
+        this.type = type
+        this.color = color
+        this.textColor = textColor
+    }
+
     private var shortName: String = ""
     private var longName: String = ""
     private var description: String = ""

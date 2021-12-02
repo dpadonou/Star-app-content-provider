@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="fr.istic.mob.starapplication.DetailsFragment"
-        android:label="fragment_details"
+        android:label="@string/horaires"
         tools:layout="@layout/fragment_details" >
         <action
             android:id="@+id/action_detailsFragment_to_addFragment"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/addFragment"
         android:name="fr.istic.mob.starapplication.AddFragment"
-        android:label="fragment_add"
+        android:label="Nouveau"
         tools:layout="@layout/fragment_add" >
         <action
             android:id="@+id/action_addFragment_to_detailsFragment"

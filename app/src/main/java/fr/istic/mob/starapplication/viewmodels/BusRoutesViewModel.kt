@@ -15,6 +15,7 @@ class BusRoutesViewModel(application: Application) : AndroidViewModel(applicatio
     private val readAllBusRoutes: LiveData<List<BusRoutes>>
     private val repository : BusRoutesRepository
 
+
     init {
         val busRoutesDao = BusRoutesDatabase.getDatabase(application).busRoutesDao()
         repository = BusRoutesRepository(busRoutesDao)
