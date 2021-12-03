@@ -12,13 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TripsViewModel(application: Application):AndroidViewModel(application) {
-    private val allTrips: Cursor
     private val repository: TripsRepository
 
     init {
         val tripsDAO = StarDatabase.getDatabase(application).tripsDAO()
         repository = TripsRepository(tripsDAO)
-        allTrips = repository.allTrips
     }
 
     fun addTrips(t: Trips){
@@ -27,7 +25,7 @@ class TripsViewModel(application: Application):AndroidViewModel(application) {
         }
 
     }
-    suspend fun addAllTrips(trips: ArrayList<Trips>){
+     fun addAllTrips(trips: ArrayList<Trips>){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addAllTrips(trips)
         }

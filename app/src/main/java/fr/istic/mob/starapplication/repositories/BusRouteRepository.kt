@@ -4,12 +4,11 @@ import fr.istic.mob.starapplication.dao.BusRoutesDAO
 import fr.istic.mob.starapplication.models.BusRoutes
 
 class BusRouteRepository(private val busRoutesDAO: BusRoutesDAO) {
-    val allBusRoutes = busRoutesDAO.getAllBusRoutes()
-    suspend fun addBusRoute(busRoutes: BusRoutes){
+     fun addBusRoute(busRoutes: BusRoutes){
         busRoutesDAO.insertBusRoutes(busRoutes)
     }
 
-    suspend fun addAllBusRoutes(l:ArrayList<BusRoutes>){
+     fun addAllBusRoutes(l:ArrayList<BusRoutes>){
          busRoutesDAO.insertAllBusRoutes(l)
     }
 

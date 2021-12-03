@@ -12,13 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CalendarViewModel(application: Application):AndroidViewModel(application) {
-    private val allCalendar: Cursor
     private val repository: CalendarRepository
 
     init {
         val calendarDAO = StarDatabase.getDatabase(application).calendarDAO()
         repository = CalendarRepository(calendarDAO)
-        allCalendar = repository.allCalendar
     }
 
     fun addCalendar(c:Calendar){
@@ -27,7 +25,7 @@ class CalendarViewModel(application: Application):AndroidViewModel(application) 
         }
 
     }
-    suspend fun addAllCalendar(calendars: ArrayList<Calendar>){
+     fun addAllCalendar(calendars: ArrayList<Calendar>){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addAllCalendar(calendars)
         }

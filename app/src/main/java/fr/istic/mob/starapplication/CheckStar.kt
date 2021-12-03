@@ -86,15 +86,16 @@ class CheckStar : Service() {
     /** Notifiez l'application d'un nouveau lien **/
     private fun notifyMyApp(context: Context, link:String,path:String){
         /** Création de la chaine pour la notification **/
+        val CHANNEL_ID = "channel"
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(NotificationChannel.DEFAULT_CHANNEL_ID,"StarDP",importance)
+            val channel = NotificationChannel(CHANNEL_ID,"StarDP",importance)
             channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             val notificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
         /**Creation de la notification en elle même **/
-        val builder = NotificationCompat.Builder(context,"starDP")
+        val builder = NotificationCompat.Builder(context,CHANNEL_ID)
         val content = "Cliquez pour télécharger"
         val title = "Mise à jour disponible"
         builder.setContentTitle(title)
@@ -103,6 +104,7 @@ class CheckStar : Service() {
             .setOngoing(true)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content).setBigContentTitle(title))
             .setAutoCancel(false)
+            .setChannelId(CHANNEL_ID)
 
         val downloadIntent = Intent(applicationContext, MainActivity::class.java)
         downloadIntent.flags = Intent.FLAG_ACTIVITY_TASK_ON_HOME

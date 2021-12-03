@@ -11,13 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BusRouteViewModel(application: Application): AndroidViewModel(application) {
-    private val allBusRoutes:Cursor
     private val repository: BusRouteRepository
 
     init {
         val busRouteDAO = StarDatabase.getDatabase(application).busRoutesDAO()
         repository = BusRouteRepository(busRouteDAO)
-        allBusRoutes = repository.allBusRoutes
     }
 
     fun addBusRoute(busRoutes: BusRoutes) {
@@ -25,7 +23,7 @@ class BusRouteViewModel(application: Application): AndroidViewModel(application)
             repository.addBusRoute(busRoutes)
         }
     }
-    suspend fun addAllBusRoute(busRoutes: ArrayList<BusRoutes>){
+    fun addAllBusRoute(busRoutes: ArrayList<BusRoutes>){
             viewModelScope.launch(Dispatchers.IO) {
                 repository.addAllBusRoutes(busRoutes)
             }

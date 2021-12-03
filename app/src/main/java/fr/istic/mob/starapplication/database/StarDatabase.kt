@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import fr.istic.mob.starapplication.dao.*
 import fr.istic.mob.starapplication.models.*
 
-@Database(entities = [BusRoutes::class, Calendar::class, Stops::class,StopTimes::class,Trips::class], version = 1, exportSchema = false)
+@Database(entities = [BusRoutes::class, Calendar::class, Stops::class, StopTimes::class, Trips::class], version = 1, exportSchema = false)
 abstract class StarDatabase: RoomDatabase() {
     abstract fun busRoutesDAO():BusRoutesDAO
     abstract fun calendarDAO():CalendarDAO

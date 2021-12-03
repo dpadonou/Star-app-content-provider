@@ -12,13 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class StopTimesViewModel(application: Application):AndroidViewModel(application) {
-    private val allStopTimes: Cursor
     private val repository: StopsTimesRepository
 
     init {
         val stopTimesDAO = StarDatabase.getDatabase(application).stopTimesDAO()
         repository = StopsTimesRepository(stopTimesDAO)
-        allStopTimes = repository.allStopsTimes
     }
 
     fun addStopTimes(st:StopTimes){
@@ -26,7 +24,7 @@ class StopTimesViewModel(application: Application):AndroidViewModel(application)
             repository.addStopsTimes(st)
         }
     }
-    suspend fun addAllStopTimes(stopsTimes: ArrayList<StopTimes>){
+     fun addAllStopTimes(stopsTimes: ArrayList<StopTimes>){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addAllStopsTimes(stopsTimes)
         }

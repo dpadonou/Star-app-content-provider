@@ -11,13 +11,12 @@ interface BusRoutesDAO {
     @Insert
     suspend fun insertAllBusRoutes(l:ArrayList<BusRoutes>)
     @Update
-    fun updateBusRoutes(b:BusRoutes)
+    suspend fun updateBusRoutes(b:BusRoutes)
     @Delete
-    fun deleteBusRoutes(b:BusRoutes)
+    suspend fun deleteBusRoutes(b:BusRoutes)
     @Query("DELETE FROM BusRoutes")
-    fun deleteAllBusRoutes()
+    suspend fun deleteAllBusRoutes()
+
     @Query("SELECT * FROM BusRoutes")
-    fun getAllBusRoutes():Cursor
-    @Query("SELECT * FROM BusRoutes WHERE _id=:id")
-    fun getBusRoutes(id:Int)
+    suspend fun getBusRoutes(): List<BusRoutes>
 }

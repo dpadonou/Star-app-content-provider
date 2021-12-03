@@ -12,13 +12,9 @@ interface StopsTimesDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAllStopsTimes(stopsTimes:ArrayList<StopTimes>)
     @Update
-    fun updateStopTimes(st: StopTimes)
+    suspend fun updateStopTimes(st: StopTimes)
     @Delete
-    fun deleteStopTimes(st: StopTimes)
+    suspend fun deleteStopTimes(st: StopTimes)
     @Query("DELETE FROM StopTimes")
-    fun deleteAllStopsTimes()
-    @Query("SELECT * FROM StopTimes")
-    fun getAllStopTimes(): Cursor
-    @Query("SELECT * FROM StopTimes WHERE id=:id")
-    fun getStopTimes(id:Int)
+    suspend fun deleteAllStopsTimes()
 }
