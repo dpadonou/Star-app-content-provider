@@ -9,13 +9,13 @@ import fr.istic.mob.starapplication.models.Trips
 @Dao
 interface TripsDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertTrips(t: Trips)
+    suspend fun insertTrips(t: Trips)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAllTrips(trips:ArrayList<Trips>)
+    suspend fun insertAllTrips(trips:ArrayList<Trips>)
     @Update
-    fun updateTrips(t:Trips)
+    suspend fun updateTrips(t:Trips)
     @Delete
-    fun deleteTrips(t:Trips)
-    @Query("DELETE FROM Trips")
-    fun deleteAllTrips()
+    suspend fun deleteTrips(t:Trips)
+   /* @Query("DELETE FROM Trips")
+    suspend fun deleteAllTrips()*/
 }

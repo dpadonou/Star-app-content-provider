@@ -5,14 +5,14 @@ import fr.istic.mob.starapplication.models.Calendar
 import fr.istic.mob.starapplication.models.StopTimes
 
 class StopsTimesRepository(private val stopsTimesDAO:StopsTimesDAO) {
-    fun addStopsTimes(st:StopTimes){
+    suspend fun addStopsTimes(st:StopTimes){
         stopsTimesDAO.insertStopTimes(st)
     }
 
-    fun addAllStopsTimes(stopsTimes:ArrayList<StopTimes>){
+    suspend fun addAllStopsTimes(stopsTimes:ArrayList<StopTimes>){
         stopsTimesDAO.insertAllStopsTimes(stopsTimes)
     }
-    fun deleteAllStopsTimes(){
+    /*suspend fun deleteAllStopsTimes(){
        stopsTimesDAO.deleteAllStopsTimes()
-    }
+    }*/
 }

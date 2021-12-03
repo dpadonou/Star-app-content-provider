@@ -15,6 +15,6 @@ interface StopsTimesDAO {
     suspend fun updateStopTimes(st: StopTimes)
     @Delete
     suspend fun deleteStopTimes(st: StopTimes)
-    @Query("DELETE FROM StopTimes")
-    suspend fun deleteAllStopsTimes()
+   /* @Query("DELETE FROM StopTimes")
+    suspend fun deleteAllStopsTimes()*/
 }

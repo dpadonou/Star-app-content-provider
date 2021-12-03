@@ -14,8 +14,8 @@ interface BusRoutesDAO {
     suspend fun updateBusRoutes(b:BusRoutes)
     @Delete
     suspend fun deleteBusRoutes(b:BusRoutes)
-    @Query("DELETE FROM BusRoutes")
-    suspend fun deleteAllBusRoutes()
+    /*@Query("DELETE FROM BusRoutes")
+    suspend fun deleteAllBusRoutes():Object*/
 
     @Query("SELECT * FROM BusRoutes")
     suspend fun getBusRoutes(): List<BusRoutes>

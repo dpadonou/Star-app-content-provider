@@ -30,9 +30,9 @@ class CalendarViewModel(application: Application):AndroidViewModel(application) 
             repository.addAllCalendar(calendars)
         }
     }
-    fun deleteAllCalendar(){
+    /*fun deleteAllCalendar(){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllCalendar()
         }
-    }
+    }*/
 }

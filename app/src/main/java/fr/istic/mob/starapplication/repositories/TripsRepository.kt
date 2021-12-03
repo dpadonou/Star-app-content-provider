@@ -4,14 +4,14 @@ import fr.istic.mob.starapplication.dao.TripsDAO
 import fr.istic.mob.starapplication.models.Trips
 
 class TripsRepository(private val tripsDAO: TripsDAO) {
-    fun addTrips(t:Trips){
+    suspend fun addTrips(t:Trips){
         tripsDAO.insertTrips(t)
     }
 
-    fun addAllTrips(trips:ArrayList<Trips>){
+    suspend fun addAllTrips(trips:ArrayList<Trips>){
         tripsDAO.insertAllTrips(trips)
     }
-    fun deleteAllTrips(){
+   /* suspend fun deleteAllTrips(){
        tripsDAO.deleteAllTrips()
-    }
+    }*/
 }

@@ -45,7 +45,7 @@ class FillDatabase(var context: Context,var application: Application) {
                     Utils(context).files[0] -> {
                         val entities = ArrayList<BusRoutes>()
                         val bV = BusRouteViewModel(application)
-                        bV.deleteAllBusRoutes()
+                        //bV.deleteAllBusRoutes()
                         for (line:String in l){
                             count++
                             val fields = line.split(",").toTypedArray()
@@ -68,7 +68,7 @@ class FillDatabase(var context: Context,var application: Application) {
                         //calendar
                         val entities = ArrayList<Calendar>()
                         val cV = CalendarViewModel(application)
-                        cV.deleteAllCalendar()
+                        //cV.deleteAllCalendar()
                         for (line:String in l){
                             count++
                             val fields = line.split(",").toTypedArray()
@@ -94,7 +94,7 @@ class FillDatabase(var context: Context,var application: Application) {
                         //trips
                         val entities = ArrayList<Trips>()
                         val tV = TripsViewModel(application)
-                        tV.deleteAllTrips()
+                        //tV.deleteAllTrips()
                         for (line:String in l){
                             count++
                             val fields = line.split(",").toTypedArray()
@@ -116,7 +116,7 @@ class FillDatabase(var context: Context,var application: Application) {
                     Utils(context).files[3] -> {
                         //stops
                         val sV = StopsViewModel(application)
-                        sV.deleteAllStops()
+                        //sV.deleteAllStops()
                         val entities = ArrayList<Stops>()
                         for (line:String in l){
                             count++
@@ -138,7 +138,7 @@ class FillDatabase(var context: Context,var application: Application) {
                     Utils(context).files[4] -> {
                         //stops_times
                         val stV = StopTimesViewModel(application)
-                        stV.deleteAllStopTimes()
+                        //stV.deleteAllStopTimes()
                         val entities = ArrayList<StopTimes>()
                         for (line:String in l){
                             count++

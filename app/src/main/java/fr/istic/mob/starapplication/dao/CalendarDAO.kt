@@ -15,6 +15,6 @@ interface CalendarDAO {
     suspend fun updateCalendar(c:Calendar)
     @Delete
     suspend fun deleteCalendar(c:Calendar)
-    @Query("DELETE FROM Calendar")
-    suspend fun deleteAllCalendar()
+   /* @Query("DELETE FROM Calendar")
+    suspend fun deleteAllCalendar() */
 }
