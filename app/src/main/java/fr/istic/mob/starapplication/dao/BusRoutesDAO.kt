@@ -1,22 +1,19 @@
 package fr.istic.mob.starapplication.dao
 
-import android.database.Cursor
-import androidx.room.*
-import fr.istic.mob.starapplication.models.BusRoutes
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import fr.istic.mob.starapplication.entities.BusRoutes
 
 @Dao
-interface BusRoutesDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertBusRoutes(b:BusRoutes)
-    @Insert
-    suspend fun insertAllBusRoutes(l:ArrayList<BusRoutes>)
-    @Update
-    suspend fun updateBusRoutes(b:BusRoutes)
-    @Delete
-    suspend fun deleteBusRoutes(b:BusRoutes)
-    /*@Query("DELETE FROM BusRoutes")
-    suspend fun deleteAllBusRoutes():Object*/
+interface BusRoutesDao {
 
-    @Query("SELECT * FROM BusRoutes")
-    suspend fun getBusRoutes(): List<BusRoutes>
+     @Insert(onConflict = OnConflictStrategy.IGNORE)
+     suspend fun addBusRoutes(busRoutes: BusRoutes)
+
+     @Query("SELECT * FROM bus_routes ORDER BY id ASC")
+     fun getAllBusRoutes() : LiveData<List<BusRoutes>>
+
 }
