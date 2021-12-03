@@ -8,12 +8,25 @@ import androidx.room.Query
 import fr.istic.mob.starapplication.entities.BusRoutes
 
 @Dao
-interface BusRoutesDao {
+interface BusRoutesDAO {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertBusRoutes(b: BusRoutes)
 
-     @Insert(onConflict = OnConflictStrategy.IGNORE)
-     suspend fun addBusRoutes(busRoutes: BusRoutes)
+    @Insert
+    suspend fun insertAllBusRoutes(l: ArrayList<BusRoutes>)
 
-     @Query("SELECT * FROM bus_routes ORDER BY id ASC")
-     fun getAllBusRoutes() : LiveData<List<BusRoutes>>
+    @Update
+    fun updateBusRoutes(b: BusRoutes)
 
+    @Delete
+    fun deleteBusRoutes(b: BusRoutes)
+
+    @Query("DELETE FROM BusRoutes")
+    fun deleteAllBusRoutes()
+
+    @Query("SELECT * FROM BusRoutes")
+    fun getAllBusRoutes(): Cursor
+
+    @Query("SELECT * FROM BusRoutes WHERE _id=:id")
+    fun getBusRoutes(id: Int)
 }

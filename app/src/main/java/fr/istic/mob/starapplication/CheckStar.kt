@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.*
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -13,8 +14,10 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 import java.io.File
-import android.app.PendingIntent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import androidx.core.content.getSystemService
+
 
 class CheckStar : Service() {
     private var firstUrl:String = ""
@@ -31,12 +34,14 @@ class CheckStar : Service() {
        return null
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         getUrl()
         return START_STICKY
     }
 
-    private fun getUrl(){
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getUrl() {
         val path = Utils(applicationContext).directoryPath
         val dir = File(path)
      /** Créer le repertoire si il n'existe pas **/
@@ -46,7 +51,7 @@ class CheckStar : Service() {
         val oldPref =this.getSharedPreferences("MyPref", 0)
         var link = ""
         val url = "https://data.explore.star.fr/api/records/1.0/search/?dataset=tco-busmetro-horaires-gtfs-versions-td&q="
-        val req =  JsonObjectRequest(Request.Method.GET,url,null,{
+        val req = JsonObjectRequest(Request.Method.GET, url, null, {
             val v = it.getJSONArray("records").get(0) as JSONObject
             link = (v.get("fields") as JSONObject).getString("url")
             var oldLink = oldPref.getString("link", null)
@@ -113,18 +118,8 @@ class CheckStar : Service() {
         val stackBuilder = TaskStackBuilder.create(applicationContext)
         stackBuilder.addNextIntent(downloadIntent)
         val pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-        builder.setContentIntent(pendingIntent)
-        /** Ajout de l'intention se declenchant quand on clique sur la notification **/
-        /*val downloadIntent = Intent(context,MainActivity::class.java)
-        downloadIntent.putExtra("link",link)
-        downloadIntent.putExtra("path",path)
-        downloadIntent.flags = Intent.FLAG_ACTIVITY_TASK_ON_HOME
-        val stackBuilder = TaskStackBuilder.create(applicationContext)
-        stackBuilder.addNextIntent(downloadIntent)
-        builder.setContentIntent(PendingIntent.getActivity(context,0,downloadIntent, PendingIntent.FLAG_UPDATE_CURRENT))*/
-        /**Lancement de la notification **/
+        notification.contentIntent = pendingIntent
         val nM = NotificationManagerCompat.from(context)
         nM.notify(1,builder.build())
     }
-
 }

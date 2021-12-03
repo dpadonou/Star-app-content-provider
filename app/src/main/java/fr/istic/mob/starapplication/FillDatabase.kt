@@ -1,10 +1,5 @@
 package fr.istic.mob.starapplication
 
-import android.R.attr
-import android.R.attr.buttonStyleToggle
-import android.provider.CalendarContract.CalendarEntity
-
-import android.R.attr.path
 import android.app.Application
 import android.content.Context
 import android.os.Build
@@ -16,25 +11,23 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
-import java.util.function.Consumer
 import java.util.stream.Stream
 import kotlin.streams.toList
 
 @RequiresApi(Build.VERSION_CODES.N)
-class FillDatabase(var context: Context,var application: Application) {
+class FillDatabase(var context: Context, var application: Application) {
 
      fun fillDatabase(){
         Log.i("","test")
         for (s:String in Utils(context).files){
             getEntitiesFromFile(s,Utils(context).directoryPath)
         }
-
-
     }
 
     private  fun getEntitiesFromFile(fileName: String, location:String) {
         //val entities: ArrayList<Any> = ArrayList()
         try {
+            val location: String = Utils(context).directoryPath
             val f = File("$location/$fileName")
             val reader = BufferedReader(FileReader(f))
             if(reader != null){
@@ -156,7 +149,7 @@ class FillDatabase(var context: Context,var application: Application) {
                                 entities.clear()
                             }
                         }
-                    }
+                    }*/
                 }
             }
         } catch (e: IOException) {
