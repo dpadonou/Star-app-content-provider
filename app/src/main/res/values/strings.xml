@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">StarApplication</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="check_for_updates">check for updates</string>
+    <string name="description">description</string>
+    <string name="longname">longName</string>
+    <string name="shortname">shortName</string>
+    <string name="save_busroutes">Save BusRoutes</string>
+    <string name="horaires">Horaires</string>
 </resources>
