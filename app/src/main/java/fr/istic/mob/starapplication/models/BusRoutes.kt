@@ -9,25 +9,37 @@ import androidx.room.PrimaryKey
 class BusRoutes {
     @PrimaryKey(autoGenerate = true)
     @NonNull
-      private var _id:Int =0
-    @ColumnInfo(name="route_short_name")
-      var shortName:String = ""
-    @ColumnInfo(name="route_long_name")
-      var longName:String =""
-    @ColumnInfo(name="route_desc")
-      var description:String =""
-    @ColumnInfo(name="route_type")
-      var type:String = ""
-    @ColumnInfo(name="route_color")
-      var color:String = ""
-    @ColumnInfo(name="route_text_color")
-      var textColor:String = ""
-  /** Getters and setters for _id **/
-    fun getId():Int{
+    private var _id: Int = 0
+
+    @ColumnInfo(name = "route_short_name")
+    var shortName: String = ""
+
+    @ColumnInfo(name = "route_long_name")
+    var longName: String = ""
+
+    @ColumnInfo(name = "route_desc")
+    var description: String = ""
+
+    @ColumnInfo(name = "route_type")
+    var type: String = ""
+
+    @ColumnInfo(name = "route_color")
+    var color: String = ""
+
+    @ColumnInfo(name = "route_text_color")
+    var textColor: String = ""
+
+    /** Getters and setters for _id **/
+    fun getId(): Int {
         return this._id
     }
-    fun setId(_id:Int){
+
+    fun setId(_id: Int) {
         this._id = _id
+    }
+
+    override fun toString(): String {
+        return "BusRoutes(_id=$_id, shortName='$shortName', longName='$longName', description='$description', type='$type', color='$color', textColor='$textColor')"
     }
 
 

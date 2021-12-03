@@ -10,8 +10,8 @@ import fr.istic.mob.starapplication.repositories.BusRouteRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class BusRouteViewModel(application: Application): AndroidViewModel(application) {
-    private val allBusRoutes:Cursor
+class BusRouteViewModel(application: Application) : AndroidViewModel(application) {
+    private val allBusRoutes: Cursor
     private val repository: BusRouteRepository
 
     init {
@@ -25,12 +25,14 @@ class BusRouteViewModel(application: Application): AndroidViewModel(application)
             repository.addBusRoute(busRoutes)
         }
     }
-    suspend fun addAllBusRoute(busRoutes: ArrayList<BusRoutes>){
-            viewModelScope.launch(Dispatchers.IO) {
-                repository.addAllBusRoutes(busRoutes)
-            }
+
+    fun addAllBusRoute(busRoutes: ArrayList<BusRoutes>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addAllBusRoutes(busRoutes)
+        }
     }
-    fun deleteAllBusRoutes(){
+
+    fun deleteAllBusRoutes() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllBusRoutes()
         }
