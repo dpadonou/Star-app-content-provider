@@ -38,9 +38,13 @@ class FillDatabase(var context: Context, var application: Application) {
     }
      fun fillDatabase(){
         Log.i("","test")
+         alertDialog.show()
         for (s:String in Utils(context).files){
             getEntitiesFromFile(s,Utils(context).directoryPath)
+            input.max = 1
+            input.progress = 1
         }
+         alertDialog.dismiss()
     }
 
     private  fun getEntitiesFromFile(fileName: String, location:String) {

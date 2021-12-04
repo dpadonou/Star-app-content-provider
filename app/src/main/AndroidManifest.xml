@@ -20,11 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StarApplication"
         android:largeHeap="true"
-        >
+        tools:targetApi="m"
+        tools:ignore="AllowBackup">
         <service
             android:name=".CheckStar"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:process=":remote" />
         <receiver
             android:name=".MyAlarm"

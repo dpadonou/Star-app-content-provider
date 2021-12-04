@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        /*val f = FillDatabase(this, application)
+        f.fillDatabase()*/
         val alarm:MyAlarm = MyAlarm()
         alarm.setAlarm(this)
         val intent = intent
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             val link = intent.extras!!.getString("link")
             val path = intent.extras!!.getString("path")
             val d = DownloadZip(this,application)
-            d.downloadZip(link.toString(),Utils(this).zipName,path.toString())
+             d.downloadZip(link.toString(),Utils(this).zipName,path.toString())
         }
 
     }
