@@ -9,7 +9,7 @@ class StopsTimesRepository(private val stopsTimesDAO:StopsTimesDAO) {
         stopsTimesDAO.insertStopTimes(st)
     }
 
-    suspend fun addAllStopsTimes(stopsTimes:ArrayList<StopTimes>){
+    suspend fun addAllStopsTimes(stopsTimes:List<StopTimes>){
         stopsTimesDAO.insertAllStopsTimes(stopsTimes)
     }
     /*suspend fun deleteAllStopsTimes(){

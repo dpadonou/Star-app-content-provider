@@ -25,7 +25,7 @@ class CalendarViewModel(application: Application):AndroidViewModel(application) 
         }
 
     }
-     fun addAllCalendar(calendars: ArrayList<Calendar>){
+     fun addAllCalendar(calendars: List<Calendar>){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addAllCalendar(calendars)
         }

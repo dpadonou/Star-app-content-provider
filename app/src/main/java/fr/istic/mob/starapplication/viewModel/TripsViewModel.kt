@@ -25,7 +25,7 @@ class TripsViewModel(application: Application):AndroidViewModel(application) {
         }
 
     }
-     fun addAllTrips(trips: ArrayList<Trips>){
+     fun addAllTrips(trips: List<Trips>){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addAllTrips(trips)
         }

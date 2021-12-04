@@ -11,7 +11,7 @@ interface TripsDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrips(t: Trips)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAllTrips(trips:ArrayList<Trips>)
+    suspend fun insertAllTrips(trips:List<Trips>)
     @Update
     suspend fun updateTrips(t:Trips)
     @Delete

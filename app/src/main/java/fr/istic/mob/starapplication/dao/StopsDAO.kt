@@ -10,7 +10,7 @@ interface StopsDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertStops(s:Stops)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAllStops(stops:ArrayList<Stops>)
+    suspend fun insertAllStops(stops:List<Stops>)
     @Update
     suspend fun updateStops(s:Stops)
     @Delete

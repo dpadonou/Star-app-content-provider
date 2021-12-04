@@ -16,6 +16,7 @@ import org.json.JSONObject
 import java.io.File
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.core.content.getSystemService
 
 
@@ -104,7 +105,7 @@ class CheckStar : Service() {
         val content = "Cliquez pour télécharger"
         val title = "Mise à jour disponible"
         builder.setContentTitle(title)
-            .setColor(ContextCompat.getColor(context,R.color.design_default_color_background))
+            .setColor(ContextCompat.getColor(context,R.color.teal_200))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content).setBigContentTitle(title))
@@ -118,7 +119,7 @@ class CheckStar : Service() {
         val stackBuilder = TaskStackBuilder.create(applicationContext)
         stackBuilder.addNextIntent(downloadIntent)
         val pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
-        notification.contentIntent = pendingIntent
+        builder.setContentIntent(pendingIntent)
         val nM = NotificationManagerCompat.from(context)
         nM.notify(1,builder.build())
     }

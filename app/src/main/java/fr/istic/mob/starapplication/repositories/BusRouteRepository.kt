@@ -8,7 +8,7 @@ class BusRouteRepository(private val busRoutesDAO: BusRoutesDAO) {
         busRoutesDAO.insertBusRoutes(busRoutes)
     }
 
-     suspend fun addAllBusRoutes(l:ArrayList<BusRoutes>){
+     suspend fun addAllBusRoutes(l:List<BusRoutes>){
          busRoutesDAO.insertAllBusRoutes(l)
     }
 

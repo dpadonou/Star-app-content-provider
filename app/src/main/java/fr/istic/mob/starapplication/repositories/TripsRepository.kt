@@ -8,7 +8,7 @@ class TripsRepository(private val tripsDAO: TripsDAO) {
         tripsDAO.insertTrips(t)
     }
 
-    suspend fun addAllTrips(trips:ArrayList<Trips>){
+    suspend fun addAllTrips(trips:List<Trips>){
         tripsDAO.insertAllTrips(trips)
     }
    /* suspend fun deleteAllTrips(){

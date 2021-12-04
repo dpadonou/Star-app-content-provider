@@ -1,10 +1,15 @@
 package fr.istic.mob.starapplication
 
 import android.app.Application
+import android.app.Dialog
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.downloader.PRDownloader
+import com.downloader.PRDownloaderConfig
 import fr.istic.mob.starapplication.models.*
 import fr.istic.mob.starapplication.viewModel.*
 import java.io.BufferedReader
@@ -17,6 +22,20 @@ import kotlin.streams.toList
 @RequiresApi(Build.VERSION_CODES.N)
 class FillDatabase(var context: Context, var application: Application) {
 
+    var alertDialog = Dialog(context)
+    private lateinit var input: ProgressBar
+    private lateinit var textView: TextView
+    private lateinit var textView2: TextView
+
+    init {
+        alertDialog.setCancelable(false)
+        alertDialog.setTitle("Fill database")
+        alertDialog.setContentView(R.layout.progression)
+        input = alertDialog.findViewById<ProgressBar>(R.id.progressBar)
+        textView = alertDialog.findViewById<TextView>(R.id.textView)
+        textView2 = alertDialog.findViewById<TextView>(R.id.textView2)
+        input.isIndeterminate = true
+    }
      fun fillDatabase(){
         Log.i("","test")
         for (s:String in Utils(context).files){
@@ -50,9 +69,10 @@ class FillDatabase(var context: Context, var application: Application) {
                             b.textColor = fields[8]
                             b.type = fields[5]
                             entities.add(b)
-                            if(entities.size == 1000 || count == l.size-1){
-                                Log.i("","Ajout de moins ou de plus 1000 élements")
-                                bV.addAllBusRoute(entities)
+                            if(entities.size == 2000 || count == l.size-1){
+                                val c = entities.toList()
+                                Log.i("","Ajout de moins ou de plus 1000 élements de busRoutes")
+                                bV.addAllBusRoute(c)
                                 entities.clear()
                             }
                         }
@@ -76,9 +96,10 @@ class FillDatabase(var context: Context, var application: Application) {
                             c.startDate = fields[8]
                             c.endDate = fields[9]
                             entities.add(c)
-                            if(entities.size == 1000 || count == l.size-1){
-                                Log.i("","Ajout de moins ou de plus 1000 élements")
-                                cV.addAllCalendar(entities)
+                            if(entities.size == 2000 || count == l.size-1){
+                                val c = entities.toList()
+                                Log.i("","Ajout de moins ou de plus 1000 élements de calendar")
+                                cV.addAllCalendar(c)
                                 entities.clear()
                             }
                         }
@@ -99,9 +120,10 @@ class FillDatabase(var context: Context, var application: Application) {
                             t.blockId = fields[6]
                             t.wheelChairAccessible = fields[8]
                             entities.add(t)
-                            if(entities.size == 1000 || count == l.size-1){
-                                Log.i("","Ajout de moins ou de plus 1000 élements")
-                                tV.addAllTrips(entities)
+                            if(entities.size == 2000 || count == l.size-1){
+                                val c = entities.toList()
+                                Log.i("","Ajout de moins ou de plus 1000 élements de trips")
+                                tV.addAllTrips(c)
                                 entities.clear()
                             }
                         }
@@ -121,9 +143,10 @@ class FillDatabase(var context: Context, var application: Application) {
                             s.longitutde = fields[5]
                             s.wheelChairBoarding = fields[11]
                             entities.add(s)
-                            if(entities.size == 1000 || count == l.size-1){
-                                Log.i("","Ajout de moins ou de plus 1000 élements")
-                                sV.addAllBStops(entities)
+                            if(entities.size == 2000 || count == l.size-1){
+                                val c = entities.toList()
+                                Log.i("","Ajout de moins ou de plus 1000 élements de stops")
+                                sV.addAllBStops(c)
                                 entities.clear()
                             }
                         }
@@ -143,13 +166,14 @@ class FillDatabase(var context: Context, var application: Application) {
                             st.stopId = fields[3]
                             st.stopSequence = fields[4]
                             entities.add(st)
-                            if(entities.size == 1000 || count == l.size-1){
-                                Log.i("","Ajout de moins ou de plus 1000 élements")
-                                stV.addAllStopTimes(entities)
+                            if(entities.size == 2000 || count == l.size-1){
+                                val c = entities.toList()
+                                Log.i("","Ajout de moins ou de plus 1000 élements de stopsTimes")
+                                stV.addAllStopTimes(c)
                                 entities.clear()
                             }
                         }
-                    }*/
+                    }
                 }
             }
         } catch (e: IOException) {

@@ -10,7 +10,7 @@ interface CalendarDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCalendar(c:Calendar)
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAllCalendar(calendars:ArrayList<Calendar>)
+    suspend fun insertAllCalendar(calendars:List<Calendar>)
     @Update
     suspend fun updateCalendar(c:Calendar)
     @Delete

@@ -24,7 +24,7 @@ class StopsViewModel(application: Application):AndroidViewModel(application) {
             repository.addStops(s)
         }
     }
-     fun addAllBStops(stops: ArrayList<Stops>){
+     fun addAllBStops(stops: List<Stops>){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addAllStops(stops)
         }

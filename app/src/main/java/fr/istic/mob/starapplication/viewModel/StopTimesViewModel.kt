@@ -24,7 +24,7 @@ class StopTimesViewModel(application: Application):AndroidViewModel(application)
             repository.addStopsTimes(st)
         }
     }
-     fun addAllStopTimes(stopsTimes: ArrayList<StopTimes>){
+     fun addAllStopTimes(stopsTimes: List<StopTimes>){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addAllStopsTimes(stopsTimes)
         }
