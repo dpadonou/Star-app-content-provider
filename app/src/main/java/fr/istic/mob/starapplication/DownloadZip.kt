@@ -11,9 +11,11 @@ import androidx.annotation.RequiresApi
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.downloader.PRDownloaderConfig
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+@Serializable
 class DownloadZip(var context: Context, var application: Application) {
     var progressBarMax: Int = 100
     var progressBarProgress: Int = 0
@@ -59,7 +61,6 @@ class DownloadZip(var context: Context, var application: Application) {
                 val d1 = BigDecimal(d).setScale(2, RoundingMode.HALF_EVEN)
                 textView.text = "$d1%"
                 println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
-
             }
             .start(object : OnDownloadListener {
                 override fun onDownloadComplete() {
