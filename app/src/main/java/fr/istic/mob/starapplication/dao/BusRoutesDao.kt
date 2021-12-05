@@ -1,11 +1,8 @@
 package fr.istic.mob.starapplication.dao
 
-import android.database.Cursor
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.Dao
 import fr.istic.mob.starapplication.models.BusRoutes
-
 
 @Dao
 interface BusRoutesDAO {
@@ -13,7 +10,7 @@ interface BusRoutesDAO {
     suspend fun insertBusRoutes(b: BusRoutes)
 
     @Insert
-    suspend fun insertAllBusRoutes(l: List<BusRoutes>)
+    suspend fun insertAllBusRoutes(l:List<BusRoutes>)
 
     @Update
     fun updateBusRoutes(b: BusRoutes)
@@ -22,11 +19,11 @@ interface BusRoutesDAO {
     fun deleteBusRoutes(b: BusRoutes)
 
     @Query("DELETE FROM BusRoutes")
-    suspend fun deleteAllBusRoutes()
+    fun deleteAllBusRoutes()
 
-    @Query("SELECT * FROM BusRoutes")
-    fun getAllBusRoutes(): LiveData<List<BusRoutes>>
+   /* @Query("SELECT * FROM BusRoutes")
+    fun getAllBusRoutes(): Cursor*/
 
-   /* @Query("SELECT * FROM BusRoutes WHERE _id=:id")
+    /*@Query("SELECT * FROM BusRoutes WHERE _id=:id")
     fun getBusRoutes(id: Int)*/
 }
