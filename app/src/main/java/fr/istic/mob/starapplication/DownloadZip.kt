@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.downloader.PRDownloaderConfig
-import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -46,11 +45,8 @@ class DownloadZip(var context: Context, var application: Application) {
     fun downloadZip(url: String, fileName: String, path: String) {
         textView2.text = "Telechargement des fichiers"
         /** Telechargement ....*/
-        PRDownloader.download(
-            url,
-            path,
-            fileName
-        ).build()
+        PRDownloader.download(url, path, fileName)
+            .build()
             /** Suivre la progression **/
             .setOnProgressListener {
                 progressBarMax = it.totalBytes.toInt()
@@ -72,8 +68,7 @@ class DownloadZip(var context: Context, var application: Application) {
                     alertDialog.dismiss()
                     val e = ExtractFile(context)
                     val f = FillDatabase(context, application)
-                    val target =
-                        Utils(context).directoryPath + Utils(context).separator + Utils(context).zipName
+                    val target = Utils(context).directoryPath + Utils(context).separator + Utils(context).zipName
                     e.extract(target, Utils(context).directoryPath)
                     f.fillDatabase()
                     println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")

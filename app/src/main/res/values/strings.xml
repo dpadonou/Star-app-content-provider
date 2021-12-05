@@ -8,4 +8,8 @@
     <string name="shortname">shortName</string>
     <string name="save_busroutes">Save BusRoutes</string>
     <string name="horaires">Horaires</string>
+    <string name="liste_des_lignes">liste des lignes</string>
+    <string name="terminusChooserText">chooseTermiuns</string>
+    <string name="dateChooserText">04 Decembre 2021</string>
+    <string name="hour">20 : 27</string>
 </resources>

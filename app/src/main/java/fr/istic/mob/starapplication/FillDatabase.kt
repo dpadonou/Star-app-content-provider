@@ -43,7 +43,7 @@ class FillDatabase(var context: Context, var application: Application) {
             input.max = 1
             input.progress = 1
         }
-         alertDialog.show()
+         //alertDialog.show()
     }
 
     private  fun getEntitiesFromFile(fileName: String, location:String) {
