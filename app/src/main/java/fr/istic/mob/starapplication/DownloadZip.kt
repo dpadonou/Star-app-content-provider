@@ -2,8 +2,13 @@ package fr.istic.mob.starapplication
 
 import android.app.Application
 import android.app.Dialog
+import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.os.HandlerThread
+import android.os.IBinder
+import android.os.Process
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -14,37 +19,22 @@ import com.downloader.PRDownloader
 import com.downloader.PRDownloaderConfig
 import java.math.BigDecimal
 import java.math.RoundingMode
-
-class DownloadZip(var context: Context, var application: Application) {
+@RequiresApi(Build.VERSION_CODES.N)
+class DownloadZip(): Service() {
     var progressBarMax: Int = 100
     var progressBarProgress: Int = 0
 
-    //var progression:Progression = Progression(context)
-    var alertDialog = Dialog(context)
-    private lateinit var input: ProgressBar
-    private lateinit var textView: TextView
-    private lateinit var textView2: TextView
-
     init {
-        alertDialog.setCancelable(false)
-        alertDialog.setTitle("Zip telechargement")
-        alertDialog.setContentView(R.layout.progression)
-        input = alertDialog.findViewById<ProgressBar>(R.id.progressBar)
-        textView = alertDialog.findViewById<TextView>(R.id.textView)
-        textView2 = alertDialog.findViewById<TextView>(R.id.textView2)
-        input.isIndeterminate = false
         // Initialize PRDownloader with read and connection timeout
         val config = PRDownloaderConfig.newBuilder()
             .setReadTimeout(30000)
             .setConnectTimeout(30000)
             .build()
-        PRDownloader.initialize(context, config)
+        PRDownloader.initialize(applicationContext, config)
     }
 
     //Telecharge le fichier
-    @RequiresApi(Build.VERSION_CODES.N)
     fun downloadZip(url: String, fileName: String, path: String) {
-        textView2.text = "Telechargement des fichiers"
         /** Telechargement ....*/
         PRDownloader.download(url, path, fileName)
             .build()
@@ -53,12 +43,7 @@ class DownloadZip(var context: Context, var application: Application) {
                 progressBarMax = it.totalBytes.toInt()
                 progressBarProgress = it.currentBytes.toInt()
                 // val d1 = Math.floorDiv( progressBarProgress,progressBarMax )
-                input.max = progressBarMax
-                input.progress = progressBarProgress
                 // val q: Int = 2/5
-                val d = (input.progress.toDouble() / input.max.toDouble()) * 100
-                val d1 = BigDecimal(d).setScale(2, RoundingMode.HALF_EVEN)
-                textView.text = "$d1%"
                 println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
 
             }
@@ -66,23 +51,44 @@ class DownloadZip(var context: Context, var application: Application) {
                 override fun onDownloadComplete() {
                     progressBarMax = 100
                     progressBarProgress = 100
-                    alertDialog.dismiss()
-                    val e = ExtractFile(context)
-                    val target = Utils(context).directoryPath + Utils(context).separator + Utils(context).zipName
-                    e.extract(target, Utils(context).directoryPath)
-                    val f = FillDatabase(context, application)
-                    f.fillDatabase()
+                    /** Lancer le service qui se charge de l'extraction **/
+                    val target = Utils(applicationContext).directoryPath + Utils(applicationContext).separator + Utils(applicationContext).zipName
+                    val intent = Intent(applicationContext, ExtractFile::class.java)
+                    intent.putExtra("target",target)
+                    applicationContext.startService(intent)
+
                     println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
                     println("Download success full")
-                    Toast.makeText(context,"Tous les fichiers ont bien été télechargé.",Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext,"Tous les fichiers ont bien été télechargé.",Toast.LENGTH_LONG).show()
                 }
 
                 override fun onError(error: com.downloader.Error?) {
                     print("Failed to download the $url")
                     Log.i("", "Erreur du telechargement")
-                    Toast.makeText(context,"Erreur de telechargement",Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext,"Erreur de telechargement",Toast.LENGTH_LONG).show()
                 }
             })
-        alertDialog.show()
+    }
+
+    override fun onCreate() {
+        val thread = HandlerThread(
+            "ServiceStartArguments",
+            Process.THREAD_PRIORITY_BACKGROUND
+        )
+        thread.start()
+    }
+
+    override fun onBind(p0: Intent?): IBinder? {
+        return null
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent?.extras != null) {
+            val url = intent.extras!!.getString("url").toString()
+            val fileName = Utils(applicationContext).zipName
+            val path = intent.extras!!.getString("path").toString()
+            downloadZip(url, fileName, path)
+        }
+        return START_STICKY
     }
 }

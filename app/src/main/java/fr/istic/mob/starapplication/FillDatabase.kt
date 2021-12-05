@@ -2,8 +2,13 @@ package fr.istic.mob.starapplication
 
 import android.app.Application
 import android.app.Dialog
+import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.os.HandlerThread
+import android.os.IBinder
+import android.os.Process
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -21,52 +26,35 @@ import java.util.stream.Stream
 import kotlin.streams.toList
 
 @RequiresApi(Build.VERSION_CODES.N)
-class FillDatabase(var context: Context, var application: Application) {
+class FillDatabase(): Service() {
 
-    var alertDialog = Dialog(context)
-    private lateinit var input: ProgressBar
-    private lateinit var textView: TextView
-    private lateinit var textView2: TextView
 
 
     init {
-        alertDialog.setCancelable(false)
-        alertDialog.setTitle("Fill database")
-        alertDialog.setContentView(R.layout.progression)
-        input = alertDialog.findViewById<ProgressBar>(R.id.progressBar)
-        textView = alertDialog.findViewById<TextView>(R.id.textView)
-        textView2 = alertDialog.findViewById<TextView>(R.id.textView2)
-        input.isIndeterminate = true
+
     }
      fun fillDatabase(){
         Log.i("","test")
-         textView2.text = "Sauvegarde des données"
-        for (s:String in Utils(context).files){
-            textView.textSize = 18F
-            textView.text = "Ajout des élements de $s."
-            getEntitiesFromFile(s,Utils(context).directoryPath)
-            if (s == Utils(context).files[Utils(context).files.size-1]){
-                alertDialog.dismiss()
-                Toast.makeText(context,"Fin du remplissage de la base",Toast.LENGTH_LONG).show()
+        for (s:String in Utils(applicationContext).files){
+            getEntitiesFromFile(s,Utils(applicationContext).directoryPath)
+            if (s == Utils(applicationContext).files[Utils(applicationContext).files.size-1]){
+                Toast.makeText(applicationContext,"Fin du remplissage de la base",Toast.LENGTH_LONG).show()
             }
         }
-         alertDialog.show()
     }
 
     private  fun getEntitiesFromFile(fileName: String, location:String) {
 
         try {
-            val location: String = Utils(context).directoryPath
+            val location: String = location
             val f = File("$location/$fileName")
             val reader = BufferedReader(FileReader(f))
             if(reader != null){
                 var lines: Stream<String> = reader.lines().skip(1)
                 val l = lines.toList()
                 var count:Int = 0
-                input.max = 1
-                input.progress = 1
                 when(fileName){
-                    Utils(context).files[0] -> {
+                    Utils(applicationContext).files[0] -> {
                         val entities = ArrayList<BusRoutes>()
                         val bV = BusRouteViewModel(application)
                         //bV.deleteAllBusRoutes()
@@ -89,7 +77,7 @@ class FillDatabase(var context: Context, var application: Application) {
                             }
                         }
                     }
-                    Utils(context).files[1] -> {
+                    Utils(applicationContext).files[1] -> {
                         //calendar
                         val entities = ArrayList<Calendar>()
                         val cV = CalendarViewModel(application)
@@ -116,7 +104,7 @@ class FillDatabase(var context: Context, var application: Application) {
                             }
                         }
                     }
-                    Utils(context).files[2] -> {
+                    Utils(applicationContext).files[2] -> {
                         //trips
                         val entities = ArrayList<Trips>()
                         val tV = TripsViewModel(application)
@@ -140,7 +128,7 @@ class FillDatabase(var context: Context, var application: Application) {
                             }
                         }
                     }
-                    Utils(context).files[3] -> {
+                    Utils(applicationContext).files[3] -> {
                         //stops
                         val sV = StopsViewModel(application)
                         //sV.deleteAllStops()
@@ -163,7 +151,7 @@ class FillDatabase(var context: Context, var application: Application) {
                             }
                         }
                     }
-                    Utils(context).files[4] -> {
+                    Utils(applicationContext).files[4] -> {
                         //stops_times
                         val stV = StopTimesViewModel(application)
                         //stV.deleteAllStopTimes()
@@ -190,7 +178,22 @@ class FillDatabase(var context: Context, var application: Application) {
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            alertDialog.dismiss()
         }
+    }
+
+    override fun onCreate() {
+        val thread = HandlerThread(
+            "ServiceStartArguments",
+            Process.THREAD_PRIORITY_BACKGROUND
+        )
+        thread.start()
+    }
+    override fun onBind(p0: Intent?): IBinder? {
+        return null
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        fillDatabase()
+        return START_STICKY
     }
 }

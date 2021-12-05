@@ -30,7 +30,6 @@ class CheckStar : Service() {
             Process.THREAD_PRIORITY_BACKGROUND
         )
         thread.start()
-       // Log.d("onCreate()", "After service created")
     }
     override fun onBind(intent: Intent): IBinder? {
        return null
@@ -48,7 +47,7 @@ class CheckStar : Service() {
         val dir = File(path)
      /** Créer le repertoire si il n'existe pas **/
         if(!dir.exists()){
-            dir.mkdirs();
+            dir.mkdirs()
         }
         val oldPref =this.getSharedPreferences("MyPref", 0)
         var link = ""
@@ -66,11 +65,11 @@ class CheckStar : Service() {
                 /** Telechargement du zip la premiere fois **/
                 Log.i("link", link)
                 Toast.makeText(applicationContext,"Lancement du premier télechargement", Toast.LENGTH_LONG).show()
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                intent.putExtra("link",link)
+                /** LAncement du service qui effectue le telechargement **/
+                val intent = Intent(applicationContext, DownloadZip::class.java)
+                intent.putExtra("url",link)
                 intent.putExtra("path",path)
-                intent.flags = FLAG_ACTIVITY_NEW_TASK
-                applicationContext.startActivity(intent)
+                applicationContext.startService(intent)
             }else{
                  //notifyMyApp(applicationContext,link,path)
                  //Log.i("link", link)
@@ -116,7 +115,7 @@ class CheckStar : Service() {
 
         val downloadIntent = Intent(applicationContext, MainActivity::class.java)
         downloadIntent.flags = Intent.FLAG_ACTIVITY_TASK_ON_HOME
-        downloadIntent.putExtra("link",link)
+        downloadIntent.putExtra("url",link)
         downloadIntent.putExtra("path",path)
         val stackBuilder = TaskStackBuilder.create(applicationContext)
         stackBuilder.addNextIntent(downloadIntent)

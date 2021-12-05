@@ -3,6 +3,7 @@ package fr.istic.mob.starapplication
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
@@ -35,16 +36,12 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         btnDate = findViewById(R.id.chooseDateBtn)
         btnTime = findViewById(R.id.chooseHourBtn)
 
-        /*val f = FillDatabase(this, application)
-        f.fillDatabase()*/
         val alarm: MyAlarm = MyAlarm()
         alarm.setAlarm(this)
+        /** Lancer un service grace à la notification **/
         val intent = intent
         if (intent.extras != null) {
-            val link = intent.extras!!.getString("link")
-            val path = intent.extras!!.getString("path")
-            val d = DownloadZip(this, application)
-            d.downloadZip(link.toString(), Utils(this).zipName, path.toString())
+            this.startService(intent)
         }
 
         setPickers()
