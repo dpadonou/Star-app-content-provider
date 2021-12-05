@@ -11,6 +11,7 @@ class TripsRepository(private val tripsDAO: TripsDAO) {
     suspend fun addAllTrips(trips:List<Trips>){
         tripsDAO.insertAllTrips(trips)
     }
+
    /* suspend fun deleteAllTrips(){
        tripsDAO.deleteAllTrips()
     }*/

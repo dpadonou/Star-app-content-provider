@@ -72,8 +72,8 @@ class CheckStar : Service() {
                 intent.flags = FLAG_ACTIVITY_NEW_TASK
                 applicationContext.startActivity(intent)
             }else{
-                 //notifyMyApp(applicationContext,link,path)
-                 //Log.i("link", link)
+                 notifyMyApp(applicationContext,link,path)
+                 Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link
                     /** Ajout du nouveau lien dans les preferneces partagées **/

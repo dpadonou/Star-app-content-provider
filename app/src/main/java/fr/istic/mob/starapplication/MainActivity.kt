@@ -11,9 +11,6 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.downloader.PRDownloader
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -33,14 +30,17 @@ class MainActivity : AppCompatActivity() {
         val alarm = MyAlarm()
         alarm.setAlarm(this)
 
+        /*val f = FillDatabase(this, application)
+        f.fillDatabase()*/
+
         val intent = intent
-        if (intent.extras != null)  {
+        if (intent.extras != null) {
             val link = intent.extras!!.getString("link")
             val path = intent.extras!!.getString("path")
             download = DownloadZip(this, application)
             download.downloadZip(link.toString(), Utils(this).zipName, path.toString())
-        }else{
-            if(savedInstanceState != null){
+        } else {
+            if (savedInstanceState != null) {
                 restoreInstance(savedInstanceState)
             }
         }
@@ -108,43 +108,43 @@ class MainActivity : AppCompatActivity() {
     private fun formatMonth(month: Int): String {
         when (month + 1) {
             1 -> {
-                return "Janvier"
+                return getString(R.string.mois_janvier)
             }
             2 -> {
-                return "Fevrier"
+                return getString(R.string.mois_fevrier)
             }
             3 -> {
-                return "Mars"
+                return getString(R.string.mois_mars)
             }
             4 -> {
-                return "Avril"
+                return getString(R.string.mois_avril)
             }
             5 -> {
-                return "Mai"
+                return getString(R.string.mois_mai)
             }
             6 -> {
-                return "Juin"
+                return getString(R.string.mois_juin)
             }
             7 -> {
-                return "Juillet"
+                return getString(R.string.mois_juillet)
             }
             8 -> {
-                return "Août"
+                return getString(R.string.mois_aout)
             }
             9 -> {
-                return "Septembre"
+                return getString(R.string.mois_septembre)
             }
             10 -> {
-                return "Octobre"
+                return getString(R.string.mois_octobre)
             }
             11 -> {
-                return "Novembre"
+                return getString(R.string.mois_novembre)
             }
             12 -> {
-                return "Decembre"
+                return getString(R.string.mois_decembre)
             }
             else -> {
-                return "####"
+                return getString(R.string.mois_errors)
             }
         }
     }

@@ -12,4 +12,20 @@
     <string name="terminusChooserText">chooseTermiuns</string>
     <string name="dateChooserText">04 Decembre 2021</string>
     <string name="hour">20 : 27</string>
+    <string name="mois_fevrier">Fevrier</string>
+    <string name="mois_janvier">Janvier</string>
+    <string name="mois_mars">Mars</string>
+    <string name="mois_avril">Avril</string>
+    <string name="mois_mai">Mai</string>
+    <string name="mois_juin">Juin</string>
+    <string name="mois_juillet">Juillet</string>
+    <string name="mois_aout">Août</string>
+    <string name="mois_septembre">Septembre</string>
+    <string name="mois_octobre">Octobre</string>
+    <string name="mois_novembre">Novembre</string>
+    <string name="mois_decembre">Decembre</string>
+    <string name="mois_errors">####</string>
+    <string name="database_dialog_title">Fill database</string>
+    <string name="save_text">Sauvegarde des données</string>
+    <string name="zip_download_title">Zip telechargement</string>
 </resources>

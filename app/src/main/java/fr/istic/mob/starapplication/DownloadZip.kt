@@ -30,7 +30,7 @@ class DownloadZip(var context: Context, var application: Application) {
 
     init {
         alertDialog.setCancelable(false)
-        alertDialog.setTitle("Zip telechargement")
+        alertDialog.setTitle(context.getString(R.string.zip_download_title))
         alertDialog.setContentView(R.layout.progression)
         input = alertDialog.findViewById<ProgressBar>(R.id.progressBar)
         textView = alertDialog.findViewById<TextView>(R.id.textView)

@@ -1,5 +1,6 @@
 package fr.istic.mob.starapplication
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.app.Dialog
 import android.content.Context
@@ -31,16 +32,17 @@ class FillDatabase(var context: Context, var application: Application) {
 
     init {
         alertDialog.setCancelable(false)
-        alertDialog.setTitle("Fill database")
+        alertDialog.setTitle(context.getString(R.string.database_dialog_title))
         alertDialog.setContentView(R.layout.progression)
         input = alertDialog.findViewById<ProgressBar>(R.id.progressBar)
         textView = alertDialog.findViewById<TextView>(R.id.textView)
         textView2 = alertDialog.findViewById<TextView>(R.id.textView2)
         input.isIndeterminate = true
     }
+     @SuppressLint("SetTextI18n")
      fun fillDatabase(){
         Log.i("","test")
-         textView2.text = "Sauvegarde des données"
+         textView2.text = context.getString(R.string.save_text)
         for (s:String in Utils(context).files){
             textView.textSize = 18F
             textView.text = "Ajout des élements de $s."
@@ -178,9 +180,9 @@ class FillDatabase(var context: Context, var application: Application) {
                             st.stopId = fields[3]
                             st.stopSequence = fields[4]
                             entities.add(st)
-                            if(entities.size == 10000 || count == l.size-1){
+                            if(entities.size == 2000 || count == l.size-1){
                                 val c = entities.toList()
-                                Log.i("","Ajout de moins ou de plus 10000 élements de stopsTimes")
+                                Log.i("","Ajout de moins ou de plus 2000 élements de stopsTimes")
                                 stV.addAllStopTimes(c)
                                 entities.clear()
                             }
