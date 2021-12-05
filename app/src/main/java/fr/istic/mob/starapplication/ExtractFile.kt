@@ -3,6 +3,7 @@ package fr.istic.mob.starapplication
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -15,7 +16,7 @@ import java.util.zip.ZipInputStream
 class ExtractFile(var context: Context) {
 
     fun extract(targetPath: String, destinationPath: String) {
-
+        Toast.makeText(context,"extraction des fichiers", Toast.LENGTH_LONG).show()
         try {
             val f: File = File(targetPath)
             if (!f.isDirectory){
@@ -38,7 +39,6 @@ class ExtractFile(var context: Context) {
                     }
             }
             f.delete()
-
         }catch (e: IOException){
            Log.i("",e.printStackTrace().toString())
         }

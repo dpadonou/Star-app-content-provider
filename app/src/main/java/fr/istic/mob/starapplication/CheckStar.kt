@@ -17,6 +17,7 @@ import java.io.File
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.widget.Toast
 import androidx.core.content.getSystemService
 
 
@@ -64,14 +65,15 @@ class CheckStar : Service() {
                 editor.apply()
                 /** Telechargement du zip la premiere fois **/
                 Log.i("link", link)
+                Toast.makeText(applicationContext,"Lancement du premier télechargement", Toast.LENGTH_LONG).show()
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 intent.putExtra("link",link)
                 intent.putExtra("path",path)
                 intent.flags = FLAG_ACTIVITY_NEW_TASK
                 applicationContext.startActivity(intent)
             }else{
-                 notifyMyApp(applicationContext,link,path)
-                 Log.i("link", link)
+                 //notifyMyApp(applicationContext,link,path)
+                 //Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link
                     /** Ajout du nouveau lien dans les preferneces partagées **/
