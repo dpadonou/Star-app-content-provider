@@ -71,8 +71,8 @@ class CheckStar : Service() {
                 intent.putExtra("path",path)
                 applicationContext.startService(intent)
             }else{
-                 //notifyMyApp(applicationContext,link,path)
-                 //Log.i("link", link)
+                 notifyMyApp(applicationContext,link,path)
+                 Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link
                     /** Ajout du nouveau lien dans les preferneces partagées **/

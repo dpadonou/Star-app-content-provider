@@ -17,7 +17,6 @@ class MyAlarm: BroadcastReceiver() {
         val intent = Intent(p0, CheckStar::class.java)
         p0!!.startService(intent)
         Log.i("","Service lancer")
-       // Toast.makeText(p0,"Service lancé", Toast.LENGTH_LONG).show()
         setAlarm(p0)
     }
 

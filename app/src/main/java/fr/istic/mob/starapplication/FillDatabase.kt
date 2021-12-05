@@ -27,7 +27,7 @@ import kotlin.streams.toList
 
 @RequiresApi(Build.VERSION_CODES.N)
 class FillDatabase(): Service() {
-
+    val progression:Progression = Progression(applicationContext,"File Extracting",100)
 
 
     init {
@@ -36,11 +36,14 @@ class FillDatabase(): Service() {
      fun fillDatabase(){
         Log.i("","test")
         for (s:String in Utils(applicationContext).files){
+            progression.builder.setProgress(1,1,true)
             getEntitiesFromFile(s,Utils(applicationContext).directoryPath)
             if (s == Utils(applicationContext).files[Utils(applicationContext).files.size-1]){
+                progression.nM.cancel(1)
                 Toast.makeText(applicationContext,"Fin du remplissage de la base",Toast.LENGTH_LONG).show()
             }
         }
+         progression.nM.notify(1,progression.builder.build())
     }
 
     private  fun getEntitiesFromFile(fileName: String, location:String) {

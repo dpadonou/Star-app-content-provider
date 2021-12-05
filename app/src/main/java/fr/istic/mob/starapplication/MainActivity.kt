@@ -27,12 +27,15 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     private var minutes = 0
     private var hours = 0
 
+    companion object{
+        var context:MainActivity? = null
+    }
     @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        context = this
         btnDate = findViewById(R.id.chooseDateBtn)
         btnTime = findViewById(R.id.chooseHourBtn)
 
@@ -41,7 +44,10 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         /** Lancer un service grace à la notification **/
         val intent = intent
         if (intent.extras != null) {
-            this.startService(intent)
+            val downloadIntent = Intent(applicationContext, DownloadZip::class.java)
+            downloadIntent.putExtra("url",intent!!.extras!!.getString("url").toString())
+            downloadIntent.putExtra("path",intent!!.extras!!.getString("path").toString())
+            this.startService(downloadIntent)
         }
 
         setPickers()

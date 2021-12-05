@@ -23,18 +23,34 @@ import java.math.RoundingMode
 class DownloadZip(): Service() {
     var progressBarMax: Int = 100
     var progressBarProgress: Int = 0
+    val context = MainActivity.context
+    val progression:Progression = Progression(context!!,"File download",100)
+    var alertDialog = Dialog(context!!)
+    private lateinit var input: ProgressBar
+    private lateinit var textView: TextView
+    private lateinit var textView2: TextView
+
 
     init {
+        alertDialog.setCancelable(false)
+        alertDialog.setTitle("Zip telechargement")
+        alertDialog.setContentView(R.layout.progression)
+        input = alertDialog.findViewById<ProgressBar>(R.id.progressBar)
+        textView = alertDialog.findViewById<TextView>(R.id.textView)
+        textView2 = alertDialog.findViewById<TextView>(R.id.textView2)
+        input.isIndeterminate = false
+
         // Initialize PRDownloader with read and connection timeout
         val config = PRDownloaderConfig.newBuilder()
             .setReadTimeout(30000)
             .setConnectTimeout(30000)
             .build()
-        PRDownloader.initialize(applicationContext, config)
+        PRDownloader.initialize(context!!, config)
     }
 
     //Telecharge le fichier
     fun downloadZip(url: String, fileName: String, path: String) {
+        textView2.text = "Telechargement des fichiers"
         /** Telechargement ....*/
         PRDownloader.download(url, path, fileName)
             .build()
@@ -42,8 +58,9 @@ class DownloadZip(): Service() {
             .setOnProgressListener {
                 progressBarMax = it.totalBytes.toInt()
                 progressBarProgress = it.currentBytes.toInt()
-                // val d1 = Math.floorDiv( progressBarProgress,progressBarMax )
-                // val q: Int = 2/5
+                val d1 = Math.floorDiv( progressBarProgress,progressBarMax )
+                textView.text = "$d1%"
+                progression.builder.setProgress(100,d1,false)
                 println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
 
             }
@@ -51,11 +68,13 @@ class DownloadZip(): Service() {
                 override fun onDownloadComplete() {
                     progressBarMax = 100
                     progressBarProgress = 100
+                    alertDialog.dismiss()
+                    progression.nM.cancel(1)
                     /** Lancer le service qui se charge de l'extraction **/
                     val target = Utils(applicationContext).directoryPath + Utils(applicationContext).separator + Utils(applicationContext).zipName
-                    val intent = Intent(applicationContext, ExtractFile::class.java)
+                    val intent = Intent(context!!, ExtractFile::class.java)
                     intent.putExtra("target",target)
-                    applicationContext.startService(intent)
+                    context!!.startService(intent)
 
                     println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
                     println("Download success full")
@@ -68,6 +87,8 @@ class DownloadZip(): Service() {
                     Toast.makeText(applicationContext,"Erreur de telechargement",Toast.LENGTH_LONG).show()
                 }
             })
+        alertDialog.show()
+        progression.nM.notify(1,progression.builder.build())
     }
 
     override fun onCreate() {
