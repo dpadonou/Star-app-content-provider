@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.downloader.PRDownloader
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -33,13 +34,16 @@ class MainActivity : AppCompatActivity() {
         alarm.setAlarm(this)
 
         val intent = intent
-        if (intent.extras != null) {
+        if (intent.extras != null)  {
             val link = intent.extras!!.getString("link")
             val path = intent.extras!!.getString("path")
             download = DownloadZip(this, application)
             download.downloadZip(link.toString(), Utils(this).zipName, path.toString())
+        }else{
+            if(savedInstanceState != null){
+                restoreInstance(savedInstanceState)
+            }
         }
-
         btnDate = findViewById(R.id.chooseDateBtn)
         btnTime = findViewById(R.id.chooseHourBtn)
         makeReady()
@@ -146,17 +150,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val downloadProcess = Json.encodeToString(download)
-        outState.putSerializable("downloadProcess", downloadProcess)
+        outState.putInt("downloadProcessId", download.downloaderId)
+        PRDownloader.pause(download.downloaderId)
         super.onSaveInstanceState(outState)
     }
 
     private fun restoreInstance(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
-            val dp = savedInstanceState.getSerializable("downloadProcess")
-            download = Json.decodeFromString("$dp")
-        }else{
-
+            val id = savedInstanceState.getInt("downloadProcessId")
+            PRDownloader.resume(id)
         }
     }
 

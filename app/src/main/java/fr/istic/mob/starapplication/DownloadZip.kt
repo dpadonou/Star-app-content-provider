@@ -19,6 +19,7 @@ import java.math.RoundingMode
 class DownloadZip(var context: Context, var application: Application) {
     var progressBarMax: Int = 100
     var progressBarProgress: Int = 0
+    var downloaderId: Int = 0
 
     //var progression:Progression = Progression(context)
     var alertDialog = Dialog(context)
@@ -47,7 +48,7 @@ class DownloadZip(var context: Context, var application: Application) {
     fun downloadZip(url: String, fileName: String, path: String) {
         textView2.text = "Telechargement des fichiers"
         /** Telechargement ....*/
-        PRDownloader.download(url, path, fileName)
+        downloaderId = PRDownloader.download(url, path, fileName)
             .build()
             /** Suivre la progression **/
             .setOnProgressListener {
