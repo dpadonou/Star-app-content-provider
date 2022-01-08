@@ -12,4 +12,5 @@
     <string name="terminusChooserText">chooseTermiuns</string>
     <string name="dateChooserText">04 Decembre 2021</string>
     <string name="hour">20 : 27</string>
+    <string name="zip_download_title">Telechargement</string>
 </resources>

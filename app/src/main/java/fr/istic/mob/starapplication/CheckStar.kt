@@ -37,6 +37,7 @@ class CheckStar : Service() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.i("","Check star lancé")
         getUrl()
         return START_STICKY
     }
@@ -65,14 +66,16 @@ class CheckStar : Service() {
                 /** Telechargement du zip la premiere fois **/
                 Log.i("link", link)
                 Toast.makeText(applicationContext,"Lancement du premier télechargement", Toast.LENGTH_LONG).show()
-                /** LAncement du service qui effectue le telechargement **/
-                val intent = Intent(applicationContext, DownloadZip::class.java)
-                intent.putExtra("url",link)
-                intent.putExtra("path",path)
-                applicationContext.startService(intent)
+                /** Lancement du service qui effectue le telechargement **/
+                val downloadIntent = Intent(applicationContext, MainActivity::class.java)
+                downloadIntent.flags = Intent.FLAG_ACTIVITY_TASK_ON_HOME
+                downloadIntent.putExtra("url",link)
+                downloadIntent.putExtra("path",path)
+                applicationContext.startActivity(downloadIntent)
+
             }else{
-                 notifyMyApp(applicationContext,link,path)
-                 Log.i("link", link)
+                 //notifyMyApp(applicationContext,link,path)
+                 //Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link
                     /** Ajout du nouveau lien dans les preferneces partagées **/

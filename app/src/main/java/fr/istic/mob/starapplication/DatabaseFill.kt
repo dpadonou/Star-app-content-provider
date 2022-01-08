@@ -1,21 +1,15 @@
 package fr.istic.mob.starapplication
 
-import android.app.Application
-import android.app.Dialog
-import android.app.Service
+import android.app.job.JobInfo
+import android.app.job.JobParameters
+import android.app.job.JobScheduler
+import android.app.job.JobService
+import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.os.Build
-import android.os.HandlerThread
-import android.os.IBinder
-import android.os.Process
 import android.util.Log
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.downloader.PRDownloader
-import com.downloader.PRDownloaderConfig
 import fr.istic.mob.starapplication.models.*
 import fr.istic.mob.starapplication.viewModel.*
 import java.io.BufferedReader
@@ -23,29 +17,59 @@ import java.io.File
 import java.io.FileReader
 import java.io.IOException
 import java.util.stream.Stream
+import java.util.zip.ZipFile
 import kotlin.streams.toList
 
+
 @RequiresApi(Build.VERSION_CODES.N)
-class FillDatabase(): Service() {
-    val progression:Progression = Progression(applicationContext,"File Extracting",100)
+class DatabaseFill: JobService() {
+    //val progression:Progression = Progression(applicationContext,"File Extracting",100)
 
-
-    init {
-
-    }
-     fun fillDatabase(){
-        Log.i("","test")
+    private fun fillDatabase(){
+        Log.i("","Debut du remplissage")
         for (s:String in Utils(applicationContext).files){
-            progression.builder.setProgress(1,1,true)
+           // progression.builder.setProgress(1,1,true)
             getEntitiesFromFile(s,Utils(applicationContext).directoryPath)
-            if (s == Utils(applicationContext).files[Utils(applicationContext).files.size-1]){
+           /* if (s == Utils(applicationContext).files[Utils(applicationContext).files.size-1]){
                 progression.nM.cancel(1)
-                Toast.makeText(applicationContext,"Fin du remplissage de la base",Toast.LENGTH_LONG).show()
-            }
+                Toast.makeText(applicationContext,"Fin du remplissage de la base", Toast.LENGTH_LONG).show()
+            }*/
         }
-         progression.nM.notify(1,progression.builder.build())
+        //progression.nM.notify(1,progression.builder.build())
     }
+    fun extract(targetPath: String, destinationPath: String) {
+        Log.i("","extraction lancée")
+        //Toast.makeText(context,"extraction des fichiers", Toast.LENGTH_LONG).show()
+        try {
+            val f: File = File(targetPath)
+            if (!f.isDirectory){
+                f.mkdirs()
+            }
+            ZipFile(f).use { it ->
+                it.entries()
+                    .asSequence()
+                    .filter { !it.isDirectory }
+                    .forEach { fl ->
+                        if ( Utils(applicationContext).files.contains(fl.name) ){
+                            val currFile = File(destinationPath, fl.name)
+                            currFile.parentFile?.mkdirs()
+                            it.getInputStream(fl).use { input ->
+                                currFile.outputStream().use { output ->
+                                    input.copyTo(output)
+                                }
+                            }
+                        }
+                    }
+            }
+            f.delete()
+            Log.i("","Extraction terminée")
+        }catch (e: IOException){
+            Log.i("",e.printStackTrace().toString())
+        }
 
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
     private  fun getEntitiesFromFile(fileName: String, location:String) {
 
         try {
@@ -184,19 +208,26 @@ class FillDatabase(): Service() {
         }
     }
 
-    override fun onCreate() {
-        val thread = HandlerThread(
-            "ServiceStartArguments",
-            Process.THREAD_PRIORITY_BACKGROUND
-        )
-        thread.start()
-    }
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
+
+    override fun onStartJob(params: JobParameters?): Boolean {
+        val task = FillTask(applicationContext,application)
+        task.execute(1)
+        return true
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        fillDatabase()
-        return START_STICKY
+    override fun onStopJob(params: JobParameters?): Boolean {
+        return true
     }
+   companion object {
+       fun scheduleJob(context: Context) {
+           val serviceComponent = ComponentName(context, DatabaseFill::class.java)
+           val jobInbo = JobInfo.Builder(0, serviceComponent)
+               .setMinimumLatency(1000) // Temps d'attente minimal avant déclenchement
+               .setOverrideDeadline(3000) // Temps d'attente maximal avant déclenchement
+               .build()
+           val jobScheduler: JobScheduler = context.getSystemService(JobScheduler::class.java)
+           jobScheduler.schedule(jobInbo)
+       }
+   }
+
 }
