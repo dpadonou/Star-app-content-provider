@@ -1,108 +1,83 @@
 package fr.istic.mob.starapplication
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
+import android.widget.DatePicker
+import android.widget.TimePicker
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.downloader.PRDownloader
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
-    private var datePickerDialog: DatePickerDialog? = null
-    private var timePickerDialog: TimePickerDialog? = null
+    private lateinit var dateDialog: DatePickerDialog
+    private lateinit var timeDialog: TimePickerDialog
     private lateinit var btnDate: Button
     private lateinit var btnTime: Button
-    private lateinit var download: DownloadZip
 
+    private var day = 0
+    private var month = 0
+    private var year = 0
+    private var minutes = 0
+    private var hours = 0
+
+    companion object{
+        var context:MainActivity? = null
+    }
     @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val alarm = MyAlarm()
-        alarm.setAlarm(this)
-
-        val intent = intent
-        if (intent.extras != null)  {
-            val link = intent.extras!!.getString("link")
-            val path = intent.extras!!.getString("path")
-            download = DownloadZip(this, application)
-            download.downloadZip(link.toString(), Utils(this).zipName, path.toString())
-        }else{
-            if(savedInstanceState != null){
-                restoreInstance(savedInstanceState)
-            }
-        }
+        context = this
         btnDate = findViewById(R.id.chooseDateBtn)
         btnTime = findViewById(R.id.chooseHourBtn)
-        makeReady()
+
+        val alarm: MyAlarm = MyAlarm()
+        alarm.setAlarm(this)
+        /** Lancer un service grace à la notification **/
+        val intent = intent
+        if (intent.extras != null) {
+            //val download = DownloadZip(this)
+            //download.downloadZip(intent!!.extras!!.getString("url").toString(),Utils(this).zipName,intent!!.extras!!.getString("path").toString())
+            val task = Downloadtask(this,intent!!.extras!!.getString("url").toString(),Utils(this).zipName,intent!!.extras!!.getString("path").toString(),application)
+            task.execute(0)
+        }
+        setPickers()
     }
 
-    private fun setListener() {
+    private fun setPickers() {
         btnDate.setOnClickListener {
-            datePickerDialog?.show()
+            getCalendarObject()
+            DatePickerDialog(this, this, year, month, day).show()
         }
 
-        btnTime.setOnClickListener {
-            timePickerDialog?.show()
+        btnTime.setOnClickListener{
+            getCalendarObject()
+            TimePickerDialog(this, this, hours, minutes, true).show()
         }
     }
 
-    private fun makeReady() {
-        val cal = Calendar.getInstance()
-        val year = cal.get(Calendar.YEAR)
-        var month = cal.get(Calendar.MONTH)
-        val day = cal.get(Calendar.DAY_OF_MONTH)
-        val hourOfDay = cal.get(Calendar.HOUR_OF_DAY)
-        val minute = cal.get(Calendar.MINUTE)
+    private fun getCalendarObject() {
+        val cal: Calendar = Calendar.getInstance()
 
-        var newText = "$day ${formatMonth(month)} $year"
+        day = cal.get(Calendar.DAY_OF_MONTH)
+        month = cal.get(Calendar.MONTH)
+        year = cal.get(Calendar.YEAR)
+        minutes = cal.get(Calendar.MINUTE)
+        hours = cal.get(Calendar.HOUR_OF_DAY)
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val newText = "$dayOfMonth ${formatMonth(month)} $year"
         btnDate.text = newText
-
-        newText = "$hourOfDay : $minute"
-        btnTime.text = newText
-
-        setListener()
-        initDatePicker()
-        initTimePicker()
-    }
-
-    private fun initDatePicker() {
-        val dateSetListener = OnDateSetListener { _, year, month, day ->
-            val newText = "$day ${formatMonth(month)} $year"
-            btnDate.text = newText
-        }
-        val cal = Calendar.getInstance()
-        val year = cal.get(Calendar.YEAR)
-        val month = cal.get(Calendar.MONTH)
-        val day = cal.get(Calendar.DAY_OF_MONTH)
-        val style: Int = AlertDialog.THEME_HOLO_LIGHT
-
-        datePickerDialog = DatePickerDialog(this, style, dateSetListener, year, month, day)
-    }
-
-    private fun initTimePicker() {
-        val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-            val newText = "$hourOfDay : $minute"
-            btnTime.text = newText
-        }
-        val cal = Calendar.getInstance()
-        val hour = cal.get(Calendar.HOUR_OF_DAY)
-        val minute = cal.get(Calendar.MINUTE)
-        val style: Int = AlertDialog.THEME_HOLO_LIGHT
-
-        timePickerDialog = TimePickerDialog(this, style, timeSetListener, hour, minute, true)
     }
 
     private fun formatMonth(month: Int): String {
@@ -149,17 +124,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt("downloadProcessId", download.downloaderId)
-        PRDownloader.pause(download.downloaderId)
-        super.onSaveInstanceState(outState)
-    }
-
-    private fun restoreInstance(savedInstanceState: Bundle?) {
-        if (savedInstanceState != null) {
-            val id = savedInstanceState.getInt("downloadProcessId")
-            PRDownloader.resume(id)
-        }
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        val newText = "$hourOfDay : $minute"
+        btnTime.text = newText
     }
 
 }

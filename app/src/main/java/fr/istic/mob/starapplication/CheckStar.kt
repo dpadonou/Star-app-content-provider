@@ -17,6 +17,7 @@ import java.io.File
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.widget.Toast
 import androidx.core.content.getSystemService
 
 
@@ -29,7 +30,6 @@ class CheckStar : Service() {
             Process.THREAD_PRIORITY_BACKGROUND
         )
         thread.start()
-       // Log.d("onCreate()", "After service created")
     }
     override fun onBind(intent: Intent): IBinder? {
        return null
@@ -37,6 +37,7 @@ class CheckStar : Service() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.i("","Check star lancé")
         getUrl()
         return START_STICKY
     }
@@ -47,7 +48,7 @@ class CheckStar : Service() {
         val dir = File(path)
      /** Créer le repertoire si il n'existe pas **/
         if(!dir.exists()){
-            dir.mkdirs();
+            dir.mkdirs()
         }
         val oldPref =this.getSharedPreferences("MyPref", 0)
         var link = ""
@@ -64,14 +65,17 @@ class CheckStar : Service() {
                 editor.apply()
                 /** Telechargement du zip la premiere fois **/
                 Log.i("link", link)
-                val intent = Intent(applicationContext, MainActivity::class.java)
-                intent.putExtra("link",link)
-                intent.putExtra("path",path)
-                intent.flags = FLAG_ACTIVITY_NEW_TASK
-                applicationContext.startActivity(intent)
+                Toast.makeText(applicationContext,"Lancement du premier télechargement", Toast.LENGTH_LONG).show()
+                /** Lancement du service qui effectue le telechargement **/
+                val downloadIntent = Intent(applicationContext, MainActivity::class.java)
+                downloadIntent.flags = Intent.FLAG_ACTIVITY_TASK_ON_HOME
+                downloadIntent.putExtra("url",link)
+                downloadIntent.putExtra("path",path)
+                applicationContext.startActivity(downloadIntent)
+
             }else{
-                 notifyMyApp(applicationContext,link,path)
-                 Log.i("link", link)
+                 //notifyMyApp(applicationContext,link,path)
+                 //Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link
                     /** Ajout du nouveau lien dans les preferneces partagées **/
@@ -114,7 +118,7 @@ class CheckStar : Service() {
 
         val downloadIntent = Intent(applicationContext, MainActivity::class.java)
         downloadIntent.flags = Intent.FLAG_ACTIVITY_TASK_ON_HOME
-        downloadIntent.putExtra("link",link)
+        downloadIntent.putExtra("url",link)
         downloadIntent.putExtra("path",path)
         val stackBuilder = TaskStackBuilder.create(applicationContext)
         stackBuilder.addNextIntent(downloadIntent)

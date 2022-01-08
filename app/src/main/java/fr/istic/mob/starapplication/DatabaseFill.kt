@@ -1,15 +1,15 @@
 package fr.istic.mob.starapplication
 
-import android.app.Application
-import android.app.Dialog
+import android.app.job.JobInfo
+import android.app.job.JobParameters
+import android.app.job.JobScheduler
+import android.app.job.JobService
+import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.downloader.PRDownloader
-import com.downloader.PRDownloaderConfig
 import fr.istic.mob.starapplication.models.*
 import fr.istic.mob.starapplication.viewModel.*
 import java.io.BufferedReader
@@ -17,39 +17,63 @@ import java.io.File
 import java.io.FileReader
 import java.io.IOException
 import java.util.stream.Stream
+import java.util.zip.ZipFile
 import kotlin.streams.toList
 
+
 @RequiresApi(Build.VERSION_CODES.N)
-class FillDatabase(var context: Context, var application: Application) {
+class DatabaseFill: JobService() {
+    //val progression:Progression = Progression(applicationContext,"File Extracting",100)
 
-    var alertDialog = Dialog(context)
-    private lateinit var input: ProgressBar
-    private lateinit var textView: TextView
-    private lateinit var textView2: TextView
-
-    init {
-        alertDialog.setCancelable(false)
-        alertDialog.setTitle("Fill database")
-        alertDialog.setContentView(R.layout.progression)
-        input = alertDialog.findViewById<ProgressBar>(R.id.progressBar)
-        textView = alertDialog.findViewById<TextView>(R.id.textView)
-        textView2 = alertDialog.findViewById<TextView>(R.id.textView2)
-        input.isIndeterminate = true
-    }
-     fun fillDatabase(){
-        Log.i("","test")
-        for (s:String in Utils(context).files){
-            getEntitiesFromFile(s,Utils(context).directoryPath)
-            input.max = 1
-            input.progress = 1
+    private fun fillDatabase(){
+        Log.i("","Debut du remplissage")
+        for (s:String in Utils(applicationContext).files){
+           // progression.builder.setProgress(1,1,true)
+            getEntitiesFromFile(s,Utils(applicationContext).directoryPath)
+           /* if (s == Utils(applicationContext).files[Utils(applicationContext).files.size-1]){
+                progression.nM.cancel(1)
+                Toast.makeText(applicationContext,"Fin du remplissage de la base", Toast.LENGTH_LONG).show()
+            }*/
         }
-         //alertDialog.show()
+        //progression.nM.notify(1,progression.builder.build())
     }
-
-    private  fun getEntitiesFromFile(fileName: String, location:String) {
-        //val entities: ArrayList<Any> = ArrayList()
+    fun extract(targetPath: String, destinationPath: String) {
+        Log.i("","extraction lancée")
+        //Toast.makeText(context,"extraction des fichiers", Toast.LENGTH_LONG).show()
         try {
-            val location: String = Utils(context).directoryPath
+            val f: File = File(targetPath)
+            if (!f.isDirectory){
+                f.mkdirs()
+            }
+            ZipFile(f).use { it ->
+                it.entries()
+                    .asSequence()
+                    .filter { !it.isDirectory }
+                    .forEach { fl ->
+                        if ( Utils(applicationContext).files.contains(fl.name) ){
+                            val currFile = File(destinationPath, fl.name)
+                            currFile.parentFile?.mkdirs()
+                            it.getInputStream(fl).use { input ->
+                                currFile.outputStream().use { output ->
+                                    input.copyTo(output)
+                                }
+                            }
+                        }
+                    }
+            }
+            f.delete()
+            Log.i("","Extraction terminée")
+        }catch (e: IOException){
+            Log.i("",e.printStackTrace().toString())
+        }
+
+
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    private  fun getEntitiesFromFile(fileName: String, location:String) {
+
+        try {
+            val location: String = location
             val f = File("$location/$fileName")
             val reader = BufferedReader(FileReader(f))
             if(reader != null){
@@ -57,7 +81,7 @@ class FillDatabase(var context: Context, var application: Application) {
                 val l = lines.toList()
                 var count:Int = 0
                 when(fileName){
-                    Utils(context).files[0] -> {
+                    Utils(applicationContext).files[0] -> {
                         val entities = ArrayList<BusRoutes>()
                         val bV = BusRouteViewModel(application)
                         //bV.deleteAllBusRoutes()
@@ -74,13 +98,13 @@ class FillDatabase(var context: Context, var application: Application) {
                             entities.add(b)
                             if(entities.size == 2000 || count == l.size-1){
                                 val c = entities.toList()
-                                Log.i("","Ajout de moins ou de plus 1000 élements de busRoutes")
+                                Log.i("","Ajout de moins ou de plus 2000 élements de busRoutes")
                                 bV.addAllBusRoute(c)
                                 entities.clear()
                             }
                         }
                     }
-                    Utils(context).files[1] -> {
+                    Utils(applicationContext).files[1] -> {
                         //calendar
                         val entities = ArrayList<Calendar>()
                         val cV = CalendarViewModel(application)
@@ -100,14 +124,14 @@ class FillDatabase(var context: Context, var application: Application) {
                             c.endDate = fields[9]
                             entities.add(c)
                             if(entities.size == 2000 || count == l.size-1){
-                                val c = entities.toList()
-                                Log.i("","Ajout de moins ou de plus 1000 élements de calendar")
-                                cV.addAllCalendar(c)
+                                val cv = entities.toList()
+                                Log.i("","Ajout de moins ou de plus 2000 élements de calendar")
+                                cV.addAllCalendar(cv)
                                 entities.clear()
                             }
                         }
                     }
-                    Utils(context).files[2] -> {
+                    Utils(applicationContext).files[2] -> {
                         //trips
                         val entities = ArrayList<Trips>()
                         val tV = TripsViewModel(application)
@@ -123,15 +147,15 @@ class FillDatabase(var context: Context, var application: Application) {
                             t.blockId = fields[6]
                             t.wheelChairAccessible = fields[8]
                             entities.add(t)
-                            if(entities.size == 2000 || count == l.size-1){
+                            if(entities.size == 3000 || count == l.size-1){
                                 val c = entities.toList()
-                                Log.i("","Ajout de moins ou de plus 1000 élements de trips")
+                                Log.i("","Ajout de moins ou de plus 3000 élements de trips")
                                 tV.addAllTrips(c)
                                 entities.clear()
                             }
                         }
                     }
-                    Utils(context).files[3] -> {
+                    Utils(applicationContext).files[3] -> {
                         //stops
                         val sV = StopsViewModel(application)
                         //sV.deleteAllStops()
@@ -148,13 +172,13 @@ class FillDatabase(var context: Context, var application: Application) {
                             entities.add(s)
                             if(entities.size == 2000 || count == l.size-1){
                                 val c = entities.toList()
-                                Log.i("","Ajout de moins ou de plus 1000 élements de stops")
+                                Log.i("","Ajout de moins ou de plus 2000 élements de stops")
                                 sV.addAllBStops(c)
                                 entities.clear()
                             }
                         }
                     }
-                    Utils(context).files[4] -> {
+                    Utils(applicationContext).files[4] -> {
                         //stops_times
                         val stV = StopTimesViewModel(application)
                         //stV.deleteAllStopTimes()
@@ -169,9 +193,9 @@ class FillDatabase(var context: Context, var application: Application) {
                             st.stopId = fields[3]
                             st.stopSequence = fields[4]
                             entities.add(st)
-                            if(entities.size == 2000 || count == l.size-1){
+                            if(entities.size == 10000 || count == l.size-1){
                                 val c = entities.toList()
-                                Log.i("","Ajout de moins ou de plus 1000 élements de stopsTimes")
+                                Log.i("","Ajout de moins ou de plus 10000 élements de stopsTimes")
                                 stV.addAllStopTimes(c)
                                 entities.clear()
                             }
@@ -184,37 +208,26 @@ class FillDatabase(var context: Context, var application: Application) {
         }
     }
 
-    /* fun insert(model:String, entities: ArrayList<Any>){
-        when(model){
-            Utils(context).files[0] -> {
-                val b = BusRouteViewModel(application)
-                b.deleteAllBusRoutes()
-                b.addAllBusRoute(entities as ArrayList<BusRoutes>)
-            }
-            Utils(context).files[1] -> {
-                //calendar
-                val c = CalendarViewModel(application)
-                c.deleteAllCalendar()
-                c.addAllCalendar(entities as ArrayList<Calendar>)
-            }
-            Utils(context).files[2] -> {
-                //trips
-                val t = TripsViewModel(application)
-                t.deleteAllTrips()
-                t.addAllTrips(entities as ArrayList<Trips>)
-            }
-            Utils(context).files[3] -> {
-                //stops
-                val s = StopsViewModel(application)
-                s.deleteAllStops()
-                s.addAllBStops(entities as ArrayList<Stops>)
-            }
-            Utils(context).files[4] -> {
-                //stops_times
-                val st = StopTimesViewModel(application)
-                st.deleteAllStopTimes()
-                st.addAllStopTimes(entities as ArrayList<StopTimes>)
-            }
-        }
-    }*/
+
+    override fun onStartJob(params: JobParameters?): Boolean {
+        val task = FillTask(applicationContext,application)
+        task.execute(1)
+        return true
+    }
+
+    override fun onStopJob(params: JobParameters?): Boolean {
+        return true
+    }
+   companion object {
+       fun scheduleJob(context: Context) {
+           val serviceComponent = ComponentName(context, DatabaseFill::class.java)
+           val jobInbo = JobInfo.Builder(0, serviceComponent)
+               .setMinimumLatency(1000) // Temps d'attente minimal avant déclenchement
+               .setOverrideDeadline(3000) // Temps d'attente maximal avant déclenchement
+               .build()
+           val jobScheduler: JobScheduler = context.getSystemService(JobScheduler::class.java)
+           jobScheduler.schedule(jobInbo)
+       }
+   }
+
 }
