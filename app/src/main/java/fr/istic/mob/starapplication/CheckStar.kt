@@ -74,7 +74,7 @@ class CheckStar : Service() {
                 applicationContext.startActivity(downloadIntent)
 
             }else{
-                 //notifyMyApp(applicationContext,link,path)
+                 notifyMyApp(applicationContext,link,path)
                  //Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link

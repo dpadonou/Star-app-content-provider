@@ -29,9 +29,9 @@ class StopsViewModel(application: Application):AndroidViewModel(application) {
             repository.addAllStops(stops)
         }
     }
-    /*fun deleteAllStops(){
+    fun deleteAllStops(){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllStops()
         }
-    }*/
+    }
 }

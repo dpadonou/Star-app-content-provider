@@ -10,7 +10,7 @@ class CalendarRepository(private val calendarDAO:CalendarDAO) {
     suspend fun addAllCalendar(calendars:List<Calendar>){
         calendarDAO.insertAllCalendar(calendars)
     }
-    /*suspend fun deleteAllCalendar(){
-        calendarDAO.deleteAllCalendar()
-    }*/
+     fun deleteAllCalendar(){
+        calendarDAO.deleteAll()
+    }
 }

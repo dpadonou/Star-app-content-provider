@@ -9,12 +9,13 @@ import fr.istic.mob.starapplication.models.*
 
 @Database(entities = [BusRoutes::class, Calendar::class, Stops::class, StopTimes::class, Trips::class], version = 1, exportSchema = false)
 abstract class StarDatabase: RoomDatabase() {
-    abstract fun busRoutesDAO():BusRoutesDAO
+    abstract fun busRoutesDAO():BusRouteDAO
     abstract fun calendarDAO():CalendarDAO
     abstract fun stopsDAO():StopsDAO
     abstract fun stopTimesDAO():StopsTimesDAO
     abstract fun tripsDAO():TripsDAO
     companion object {
+        const val name = "star_database"
         @Volatile
         private var INSTANCE: StarDatabase? = null
         fun getDatabase(context: Context): StarDatabase {
@@ -26,7 +27,7 @@ abstract class StarDatabase: RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     StarDatabase::class.java,
-                    "star_database"
+                    name
                 ).build()
                 INSTANCE = instance
                 return instance

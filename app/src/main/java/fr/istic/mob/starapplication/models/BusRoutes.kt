@@ -4,8 +4,9 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import fr.istic.mob.starapplication.database.StarContract
 
-@Entity
+@Entity(tableName = StarContract.BusRoutes.CONTENT_PATH)
 class BusRoutes {
     @PrimaryKey(autoGenerate = true)
     @NonNull

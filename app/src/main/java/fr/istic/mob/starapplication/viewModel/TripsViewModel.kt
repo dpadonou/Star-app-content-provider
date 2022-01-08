@@ -30,9 +30,9 @@ class TripsViewModel(application: Application):AndroidViewModel(application) {
             repository.addAllTrips(trips)
         }
     }
-    /*fun deleteAllTrips(){
+    fun deleteAllTrips(){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllTrips()
         }
-    }*/
+    }
 }

@@ -12,7 +12,7 @@ class StopsRepository(private val stopsDAO: StopsDAO) {
     suspend fun addAllStops(stops:List<Stops>){
         stopsDAO.insertAllStops(stops)
     }
-   /* suspend fun deleteAllStops(){
-        stopsDAO.deleteAllStops()
-    }*/
+     fun deleteAllStops(){
+        stopsDAO.deleteAll()
+    }
 }

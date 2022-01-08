@@ -29,9 +29,9 @@ class StopTimesViewModel(application: Application):AndroidViewModel(application)
             repository.addAllStopsTimes(stopsTimes)
         }
     }
-    /*fun deleteAllStopTimes(){
+    fun deleteAllStopTimes(){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllStopsTimes()
         }
-    }*/
+    }
 }

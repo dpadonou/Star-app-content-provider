@@ -145,7 +145,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                     Utils(context).files[0] -> {
                         val entities = ArrayList<BusRoutes>()
                         val bV = BusRouteViewModel(application)
-                        //bV.deleteAllBusRoutes()
+                        bV.deleteAllBusRoutes()
                         for (line:String in l){
                             this.publishProgress(1)
                             count++
@@ -170,7 +170,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                         //calendar
                         val entities = ArrayList<Calendar>()
                         val cV = CalendarViewModel(application)
-                        //cV.deleteAllCalendar()
+                        cV.deleteAllCalendar()
                         for (line:String in l){
                             this.publishProgress(1)
                             count++
@@ -199,7 +199,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                         //trips
                         val entities = ArrayList<Trips>()
                         val tV = TripsViewModel(application)
-                        //tV.deleteAllTrips()
+                        tV.deleteAllTrips()
                         for (line:String in l){
                             count++
                             val fields = line.split(",").toTypedArray()
@@ -223,7 +223,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                         this.publishProgress(1)
                         //stops
                         val sV = StopsViewModel(application)
-                        //sV.deleteAllStops()
+                        sV.deleteAllStops()
                         val entities = ArrayList<Stops>()
                         for (line:String in l){
                             count++
@@ -246,7 +246,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                     Utils(context).files[4] -> {
                         //stops_times
                         val stV = StopTimesViewModel(application)
-                        //stV.deleteAllStopTimes()
+                        stV.deleteAllStopTimes()
                         val entities = ArrayList<StopTimes>()
                         for (line:String in l){
                             this.publishProgress(1)

@@ -12,7 +12,7 @@ class StopsTimesRepository(private val stopsTimesDAO:StopsTimesDAO) {
     suspend fun addAllStopsTimes(stopsTimes:List<StopTimes>){
         stopsTimesDAO.insertAllStopsTimes(stopsTimes)
     }
-    /*suspend fun deleteAllStopsTimes(){
-       stopsTimesDAO.deleteAllStopsTimes()
-    }*/
+    fun deleteAllStopsTimes(){
+       stopsTimesDAO.deleteAll()
+    }
 }

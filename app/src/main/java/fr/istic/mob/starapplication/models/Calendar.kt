@@ -4,8 +4,9 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import fr.istic.mob.starapplication.database.StarContract
 
-@Entity
+@Entity(tableName = StarContract.Calendar.CONTENT_PATH)
 class Calendar {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -15,8 +16,7 @@ class Calendar {
     @ColumnInfo(name = "tuesday")
     var tuesday:String = ""
     @ColumnInfo(name = "wednesday")
-    var wednesday:String = ""
-    @ColumnInfo(name = "thursday")
+    var wednesday = ""
     var thursday:String = ""
     @ColumnInfo(name = "friday")
     var friday:String = ""

@@ -28,9 +28,9 @@ class BusRouteViewModel(application: Application): AndroidViewModel(application)
                 repository.addAllBusRoutes(busRoutes)
             }
     }
-    /*fun deleteAllBusRoutes(){
+    fun deleteAllBusRoutes(){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllBusRoutes()
         }
-    } */
+    }
 }
