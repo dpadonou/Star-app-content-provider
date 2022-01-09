@@ -65,7 +65,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
         Log.i("","Debut du remplissage")
         for (s:String in Utils(context).files){
             // progression.builder.setProgress(1,1,true)
-            this.publishProgress(1)
+            //this.publishProgress(1)
             getEntitiesFromFile(s,Utils(context).directoryPath)
             /* if (s == Utils(applicationContext).files[Utils(applicationContext).files.size-1]){
                  progression.nM.cancel(1)
@@ -73,7 +73,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
              }*/
         }
         nM.cancel(1)
-        Toast.makeText(context,"Extraction et remplissage de la base terminée", Toast.LENGTH_LONG).show()
+       // Toast.makeText(context,"Extraction et remplissage de la base terminée", Toast.LENGTH_LONG).show()
     }
     private fun sendProgress(){
         /** Création de la chaine pour la notification **/
@@ -105,13 +105,13 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
             if (!f.isDirectory){
                 f.mkdirs()
             }
+            this.publishProgress(1)
             ZipFile(f).use { it ->
                 it.entries()
                     .asSequence()
                     .filter { !it.isDirectory }
                     .forEach { fl ->
                         if ( Utils(context).files.contains(fl.name) ){
-                            this.publishProgress(1)
                             val currFile = File(destinationPath, fl.name)
                             currFile.parentFile?.mkdirs()
                             it.getInputStream(fl).use { input ->
@@ -143,11 +143,12 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                 var count:Int = 0
                 when(fileName){
                     Utils(context).files[0] -> {
+                        this.publishProgress(1)
                         val entities = ArrayList<BusRoutes>()
                         val bV = BusRouteViewModel(application)
                         bV.deleteAllBusRoutes()
                         for (line:String in l){
-                            this.publishProgress(1)
+                            //this.publishProgress(1)
                             count++
                             val fields = line.split(",").toTypedArray()
                             val b = BusRoutes()
@@ -167,12 +168,13 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                         }
                     }
                     Utils(context).files[1] -> {
+                        this.publishProgress(1)
                         //calendar
                         val entities = ArrayList<Calendar>()
                         val cV = CalendarViewModel(application)
                         cV.deleteAllCalendar()
                         for (line:String in l){
-                            this.publishProgress(1)
+                            //this.publishProgress(1)
                             count++
                             val fields = line.split(",").toTypedArray()
                             val c = Calendar()
@@ -201,6 +203,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                         val tV = TripsViewModel(application)
                         tV.deleteAllTrips()
                         for (line:String in l){
+                            //this.publishProgress(1)
                             count++
                             val fields = line.split(",").toTypedArray()
                             val t = Trips()
@@ -220,12 +223,13 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                         }
                     }
                     Utils(context).files[3] -> {
-                        this.publishProgress(1)
                         //stops
+                        this.publishProgress(1)
                         val sV = StopsViewModel(application)
                         sV.deleteAllStops()
                         val entities = ArrayList<Stops>()
                         for (line:String in l){
+                           // this.publishProgress(1)
                             count++
                             val fields = line.split(",").toTypedArray()
                             val s = Stops()
@@ -245,11 +249,12 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                     }
                     Utils(context).files[4] -> {
                         //stops_times
+                        this.publishProgress(1)
                         val stV = StopTimesViewModel(application)
                         stV.deleteAllStopTimes()
                         val entities = ArrayList<StopTimes>()
                         for (line:String in l){
-                            this.publishProgress(1)
+                           // this.publishProgress(1)
                             count++
                             val fields = line.split(",").toTypedArray()
                             val st = StopTimes()

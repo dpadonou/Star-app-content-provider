@@ -65,16 +65,17 @@ class CheckStar : Service() {
                 editor.apply()
                 /** Telechargement du zip la premiere fois **/
                 Log.i("link", link)
-                Toast.makeText(applicationContext,"Lancement du premier télechargement", Toast.LENGTH_LONG).show()
+                //Toast.makeText(applicationContext,"Lancement du premier télechargement", Toast.LENGTH_LONG).show()
+                notifyMyApp(applicationContext,link,path)
                 /** Lancement du service qui effectue le telechargement **/
-                val downloadIntent = Intent(applicationContext, MainActivity::class.java)
+                /*val downloadIntent = Intent(applicationContext, MainActivity::class.java)
                 downloadIntent.flags = Intent.FLAG_ACTIVITY_TASK_ON_HOME
                 downloadIntent.putExtra("url",link)
                 downloadIntent.putExtra("path",path)
-                applicationContext.startActivity(downloadIntent)
-
+                //TODO: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?
+                applicationContext.startActivity(downloadIntent)*/
             }else{
-                 notifyMyApp(applicationContext,link,path)
+                notifyMyApp(applicationContext,link,path)
                  //Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link
