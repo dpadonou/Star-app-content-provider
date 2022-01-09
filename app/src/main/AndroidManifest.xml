@@ -13,6 +13,13 @@
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
+    <permission-group android:name="stardp.permission.READ_WRITE"/>
+
+    <permission
+        android:name="stardp.permission.WRITE_STAR_PROVIDER"
+        android:permissionGroup="stardp.permission.READ_WRITE"
+        android:protectionLevel="normal" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
