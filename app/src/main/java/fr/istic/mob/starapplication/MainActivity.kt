@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Utils.setActivity(this)
         context = this
         btnDate = findViewById(R.id.chooseDateBtn)
         btnTime = findViewById(R.id.chooseHourBtn)

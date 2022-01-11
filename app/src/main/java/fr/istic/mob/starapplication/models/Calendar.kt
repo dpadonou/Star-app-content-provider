@@ -11,6 +11,8 @@ class Calendar {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     var id:Int = 0
+    @ColumnInfo(name = "service_id")
+    var serviceId:String = ""
     @ColumnInfo(name = "monday")
     var monday:String = ""
     @ColumnInfo(name = "tuesday")

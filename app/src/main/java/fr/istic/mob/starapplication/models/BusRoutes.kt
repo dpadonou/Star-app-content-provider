@@ -11,6 +11,8 @@ class BusRoutes {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     private var _id: Int = 0
+    @ColumnInfo(name="route_id")
+    var routeId:String = ""
 
     @ColumnInfo(name = "route_short_name")
     var shortName: String = ""

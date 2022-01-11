@@ -11,6 +11,8 @@ class Trips {
  @PrimaryKey(autoGenerate = true)
  @NonNull
   var id:Int = 0
+ @ColumnInfo(name="trip_id")
+  var tripId:String = ""
  @ColumnInfo(name = "route_id")
   var routeId:String = ""
  @ColumnInfo(name = "service_id")

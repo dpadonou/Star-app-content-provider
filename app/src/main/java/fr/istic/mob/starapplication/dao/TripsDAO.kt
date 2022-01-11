@@ -46,6 +46,7 @@ interface TripsDAO {
      */
     @Query(
         "SELECT DISTINCT "
+                + StarContract.Trips.TripColumns.TRIP_ID + ", "
                 + StarContract.Trips.TripColumns.HEADSIGN + ", "
                 + StarContract.Trips.TripColumns.DIRECTION_ID + ", "
                 + StarContract.Trips.TripColumns.ROUTE_ID +

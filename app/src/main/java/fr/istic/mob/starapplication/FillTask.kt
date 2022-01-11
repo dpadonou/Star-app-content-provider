@@ -46,6 +46,8 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
         Log.i("","Extraction terminée")
         fillDatabase()
         Log.i("","Fin du remplissage")
+        Utils.stopActivity()
+
         return true
     }
 
@@ -152,6 +154,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val b = BusRoutes()
+                            b.routeId = fields[0]
                             b.color = fields[7]
                             b.description = fields[4]
                             b.shortName = fields[2]
@@ -178,6 +181,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val c = Calendar()
+                            c.serviceId = fields[0]
                             c.monday = fields[1]
                             c.tuesday = fields[2]
                             c.wednesday = fields[3]
@@ -207,6 +211,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val t = Trips()
+                            t.tripId =fields[2]
                             t.routeId = fields[0]
                             t.serviceId = fields[1]
                             t.headSign = fields[3]
@@ -233,6 +238,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val s = Stops()
+                            s.stopId = fields[0]
                             s.stopName = fields[2]
                             s.description = fields[3]
                             s.latitude = fields[4]

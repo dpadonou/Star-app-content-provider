@@ -9,4 +9,15 @@ class Utils(var context: Context) {
      val separator = "/"
      val zipName = "content.zip"
      val files = arrayOf("routes.txt","calendar.txt","trips.txt","stops.txt","stop_times.txt")
+
+     companion object{
+          private lateinit var activity:MainActivity
+          fun setActivity(activity:MainActivity){
+               this.activity = activity
+          }
+          fun stopActivity(){
+               activity.finish()
+          }
+
+     }
 }
