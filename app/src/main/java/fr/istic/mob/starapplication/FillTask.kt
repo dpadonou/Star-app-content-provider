@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import fr.istic.mob.starapplication.database.StarDatabase
 import fr.istic.mob.starapplication.models.*
 import fr.istic.mob.starapplication.viewModel.*
 import java.io.BufferedReader

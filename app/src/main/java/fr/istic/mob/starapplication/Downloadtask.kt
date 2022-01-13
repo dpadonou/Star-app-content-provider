@@ -22,6 +22,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import fr.istic.mob.starapplication.database.StarDatabase
 
 
 class Downloadtask: AsyncTask<Int, Int, Boolean> {

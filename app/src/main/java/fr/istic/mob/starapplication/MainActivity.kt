@@ -6,11 +6,14 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import fr.istic.mob.starapplication.dao.StopsDAO
+import fr.istic.mob.starapplication.database.StarDatabase
 import java.util.*
 
 class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
@@ -40,9 +43,9 @@ class MainActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         context = this
         btnDate = findViewById(R.id.chooseDateBtn)
         btnTime = findViewById(R.id.chooseHourBtn)
-
         val alarm: MyAlarm = MyAlarm()
         alarm.setAlarm(this)
+       // Utils.getStop()
         /** Lancer un service grace à la notification **/
         val intent = intent
         if (intent.extras != null) {

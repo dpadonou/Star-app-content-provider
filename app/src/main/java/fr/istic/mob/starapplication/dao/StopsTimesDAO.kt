@@ -2,6 +2,7 @@ package fr.istic.mob.starapplication.dao
 
 import android.database.Cursor
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import fr.istic.mob.starapplication.models.Calendar
 import fr.istic.mob.starapplication.models.StopTimes
 import fr.istic.mob.starapplication.database.StarContract
@@ -26,29 +27,7 @@ interface StopsTimesDAO {
     @Query("Select * from " + StarContract.StopTimes.CONTENT_PATH)
     fun getStopTimeList(): List<StopTimes?>?
 
-    /**
-     * A big join request which returns all the stops times for the chosen route, in the chosen direction,
-     * at the chosen stop, from the chosen time until the end of the day.
-     *
-     * select distinct stoptime.arrival_time, trip._id
-     * from stoptime, trip, calendar
-     * where stoptime.trip_id = trip._id
-     * and trip.service_id = calendar._id
-     * and trip.route_id = :route_id
-     * and stoptime.stop_id = :stop_id
-     * and trip.direction_id = direction_id
-     * and calendar.monday = 1
-     * and stoptime.arrival_time > : arrival_time
-     * group by stoptime.arrival_time
-     * order by stoptime.arrival_time;
-     *
-     * @param routeId     id of the chosen route
-     * @param stopId      id of the chosen stop
-     * @param directionId the chosen direction
-     * @param arrivalTime chosen time
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+   /* @Query(
         "SELECT DISTINCT "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
@@ -67,40 +46,12 @@ interface StopsTimesDAO {
                 + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > :arrivalTime"
                 + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
                 + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
-    )
-    fun getStopTimeCursorMonday(
-        routeId: String?,
-        stopId: String?,
-        directionId: String?,
-        arrivalTime: String?
-    ): Cursor?
+    )*/
+    @RawQuery
+    fun getStopTimeCursorMonday(qry: SupportSQLiteQuery): Cursor?
 
-    /**
-     * A big join request which returns all the stops times
-     * for the chosen route, in the chosen direction,
-     * at the chosen stop, from the chosen time until
-     * the end of the day.
-     *
-     *
-     * select distinct stoptime.arrival_time, trip._id
-     * from stoptime, trip, calendar
-     * where stoptime.trip_id = trip._id
-     * and trip.service_id = calendar._id
-     * and trip.route_id = :route_id
-     * and stoptime.stop_id = :stop_id
-     * and trip.direction_id = direction_id
-     * and calendar.tuesday = 1
-     * and stoptime.arrival_time > : arrival_time
-     * group by stoptime.arrival_time
-     * order by stoptime.arrival_time;
-     *
-     * @param routeId     id of the chosen route
-     * @param stopId      id of the chosen stop
-     * @param directionId the chosen direction
-     * @param arrivalTime chosen time
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+
+   /* @Query(
         ("SELECT DISTINCT "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
@@ -121,40 +72,11 @@ interface StopsTimesDAO {
                 + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > :arrivalTime"
                 + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
                 + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
-    )
-    fun getStopTimeCursorTuesday(
-        routeId: String?,
-        stopId: String?,
-        directionId: String?,
-        arrivalTime: String?
-    ): Cursor?
+    )*/
+    @RawQuery
+    fun getStopTimeCursorTuesday(qry: SupportSQLiteQuery): Cursor?
 
-    /**
-     * A big join request which returns all the stops times
-     * for the chosen route, in the chosen direction,
-     * at the chosen stop, from the chosen time until
-     * the end of the day.
-     *
-     *
-     * select distinct stoptime.arrival_time, trip._id
-     * from stoptime, trip, calendar
-     * where stoptime.trip_id = trip._id
-     * and trip.service_id = calendar._id
-     * and trip.route_id = :route_id
-     * and stoptime.stop_id = :stop_id
-     * and trip.direction_id = direction_id
-     * and calendar.wenesday = 1
-     * and stoptime.arrival_time > : arrival_time
-     * group by stoptime.arrival_time
-     * order by stoptime.arrival_time;
-     *
-     * @param routeId     id of the chosen route
-     * @param stopId      id of the chosen stop
-     * @param directionId the chosen direction
-     * @param arrivalTime chosen time
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+   /* @Query(
         ("SELECT DISTINCT "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
@@ -175,40 +97,11 @@ interface StopsTimesDAO {
                 + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > :arrivalTime"
                 + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
                 + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
-    )
-    fun getStopTimeCursorWenesday(
-        routeId: String?,
-        stopId: String?,
-        directionId: String?,
-        arrivalTime: String?
-    ): Cursor?
+    )*/
+    @RawQuery
+    fun getStopTimeCursorWenesday(qry: SupportSQLiteQuery): Cursor?
 
-    /**
-     * A big join request which returns all the stops times
-     * for the chosen route, in the chosen direction,
-     * at the chosen stop, from the chosen time until
-     * the end of the day.
-     *
-     *
-     * select distinct stoptime.arrival_time, trip._id
-     * from stoptime, trip, calendar
-     * where stoptime.trip_id = trip._id
-     * and trip.service_id = calendar._id
-     * and trip.route_id = :route_id
-     * and stoptime.stop_id = :stop_id
-     * and trip.direction_id = direction_id
-     * and calendar.thursday = 1
-     * and stoptime.arrival_time > : arrival_time
-     * group by stoptime.arrival_time
-     * order by stoptime.arrival_time;
-     *
-     * @param routeId     id of the chosen route
-     * @param stopId      id of the chosen stop
-     * @param directionId the chosen direction
-     * @param arrivalTime chosen time
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+   /* @Query(
         ("SELECT DISTINCT "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
@@ -229,40 +122,11 @@ interface StopsTimesDAO {
                 + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > :arrivalTime"
                 + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
                 + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
-    )
-    fun getStopTimeCursorThursday(
-        routeId: String?,
-        stopId: String?,
-        directionId: String?,
-        arrivalTime: String?
-    ): Cursor?
+    )*/
+    @RawQuery
+    fun getStopTimeCursorThursday(qry: SupportSQLiteQuery): Cursor?
 
-    /**
-     * A big join request which returns all the stops times
-     * for the chosen route, in the chosen direction,
-     * at the chosen stop, from the chosen time until
-     * the end of the day.
-     *
-     *
-     * select distinct stoptime.arrival_time, trip._id
-     * from stoptime, trip, calendar
-     * where stoptime.trip_id = trip._id
-     * and trip.service_id = calendar._id
-     * and trip.route_id = :route_id
-     * and stoptime.stop_id = :stop_id
-     * and trip.direction_id = direction_id
-     * and calendar.friday = 1
-     * and stoptime.arrival_time > : arrival_time
-     * group by stoptime.arrival_time
-     * order by stoptime.arrival_time;
-     *
-     * @param routeId     id of the chosen route
-     * @param stopId      id of the chosen stop
-     * @param directionId the chosen direction
-     * @param arrivalTime chosen time
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+   /* @Query(
         ("SELECT DISTINCT "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
@@ -283,37 +147,11 @@ interface StopsTimesDAO {
                 + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > :arrivalTime"
                 + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
                 + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
-    )
-    fun getStopTimeCursorFriday(
-        routeId: String?,
-        stopId: String?,
-        directionId: String?,
-        arrivalTime: String?
-    ): Cursor?
+    )*/
+    @RawQuery
+    fun getStopTimeCursorFriday(qry: SupportSQLiteQuery): Cursor?
 
-    /**
-     * A big join request which returns all the stops times for the chosen route, in the chosen direction,
-     * at the chosen stop, from the chosen time until he end of the day.
-     *
-     * select distinct stoptime.arrival_time, trip._id
-     * from stoptime, trip, calendar
-     * where stoptime.trip_id = trip._id
-     * and trip.service_id = calendar._id
-     * and trip.route_id = :route_id
-     * and stoptime.stop_id = :stop_id
-     * and trip.direction_id = direction_id
-     * and calendar.saturday = 1
-     * and stoptime.arrival_time > : arrival_time
-     * group by stoptime.arrival_time
-     * order by stoptime.arrival_time;
-     *
-     * @param routeId     id of the chosen route
-     * @param stopId      id of the chosen stop
-     * @param directionId the chosen direction
-     * @param arrivalTime chosen time
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+    /*@Query(
         ("SELECT DISTINCT "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
@@ -334,37 +172,11 @@ interface StopsTimesDAO {
                 + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > :arrivalTime"
                 + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
                 + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
-    )
-    fun getStopTimeCursorSaturday(
-        routeId: String?,
-        stopId: String?,
-        directionId: String?,
-        arrivalTime: String?
-    ): Cursor?
+    )*/
+    @RawQuery
+    fun getStopTimeCursorSaturday(qry: SupportSQLiteQuery): Cursor?
 
-    /**
-     * A big join request which returns all the stops times for the chosen route, in the chosen direction,
-     * at the chosen stop, from the chosen time until the end of the day.
-     *
-     * select distinct stoptime.arrival_time, trip._id
-     * from stoptime, trip, calendar
-     * where stoptime.trip_id = trip._id
-     * and trip.service_id = calendar._id
-     * and trip.route_id = :route_id
-     * and stoptime.stop_id = :stop_id
-     * and trip.direction_id = direction_id
-     * and calendar.sunday = 1
-     * and stoptime.arrival_time > : arrival_time
-     * group by stoptime.arrival_time
-     * order by stoptime.arrival_time;
-     *
-     * @param routeId     id of the chosen route
-     * @param stopId      id of the chosen stop
-     * @param directionId the chosen direction
-     * @param arrivalTime chosen time
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+   /* @Query(
         ("SELECT DISTINCT "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
@@ -385,28 +197,12 @@ interface StopsTimesDAO {
                 + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > :arrivalTime"
                 + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
                 + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
-    )
-    fun getStopTimeCursorSunday(
-        routeId: String?,
-        stopId: String?,
-        directionId: String?,
-        arrivalTime: String?
-    ): Cursor?
+    )*/
+    @RawQuery
+    fun getStopTimeCursorSunday(qry: SupportSQLiteQuery): Cursor?
 
-    /**
-     * A big join request which returns
-     * select distinct stop.stop_name, stoptime.arrival_time
-     * from stop, stoptime
-     * where stop._id = stoptime.stop_id
-     * and stoptime.trip_id = :tripId
-     * and stoptime.arrival_time > :arrivalTime
-     * order by stoptime.arrival_time;
-     *
-     * @param tripId      trip's id
-     * @param arrivalTime
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+
+   /* @Query(
         ("SELECT DISTINCT "
                 + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.NAME + ", "
                 + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME +
@@ -415,6 +211,7 @@ interface StopsTimesDAO {
                 " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + " = :tripId" +
                 " AND " + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > :arrivalTime" +
                 " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
-    )
-    fun getRouteDetail(tripId: String?, arrivalTime: String?): Cursor?
+    )*/
+    @RawQuery
+    fun getRouteDetail(qry: SupportSQLiteQuery): Cursor?
 }

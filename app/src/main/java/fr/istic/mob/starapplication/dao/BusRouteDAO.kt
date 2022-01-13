@@ -2,6 +2,7 @@ package fr.istic.mob.starapplication.dao
 
 import android.database.Cursor
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import fr.istic.mob.starapplication.models.BusRoutes
 import fr.istic.mob.starapplication.database.StarContract
 
@@ -50,7 +51,7 @@ interface BusRouteDAO {
     )
     fun getRouteListCursor(): Cursor?
 
-    @Query(
+    /*@Query(
         ("SELECT DISTINCT " +
                 StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns._ID + ", " +
                 StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns.ROUTE_ID+", "+
@@ -66,8 +67,9 @@ interface BusRouteDAO {
                 " AND " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.TRIP_ID + "= " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID +
                 " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + "= " + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.STOP_ID +
                 " ORDER BY " + StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns._ID)
-    )
-    fun getRoutesForStop(stop_name: String?): Cursor?
+    )*/
+    @RawQuery
+    fun getRoutesForStop(qry: SupportSQLiteQuery): Cursor?
 
     /* @Query("SELECT * FROM BusRoutes")
      fun getAllBusRoutes(): Cursor*/

@@ -2,6 +2,7 @@ package fr.istic.mob.starapplication.dao
 
 import android.database.Cursor
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import fr.istic.mob.starapplication.models.Calendar
 import fr.istic.mob.starapplication.models.StopTimes
 import fr.istic.mob.starapplication.models.Trips
@@ -35,16 +36,7 @@ interface TripsDAO {
     @Query("Select * from " + StarContract.Trips.CONTENT_PATH)
     fun getTripsList(): List<Trips?>?
 
-    /**
-     * A big join request which returns
-     * select distinct trip.trip_headsign, trip.direction_id, trip.route_id
-     * from trip
-     * where trip.route_id = :route_id;
-     *
-     * @param routeId id of the chosen route
-     * @return a Cursor which list the result from the database
-     */
-    @Query(
+    /*@Query(
         "SELECT DISTINCT "
                 + StarContract.Trips.TripColumns.TRIP_ID + ", "
                 + StarContract.Trips.TripColumns.HEADSIGN + ", "
@@ -52,6 +44,7 @@ interface TripsDAO {
                 + StarContract.Trips.TripColumns.ROUTE_ID +
                 " FROM " + StarContract.Trips.CONTENT_PATH +
                 " WHERE " + StarContract.Trips.TripColumns.ROUTE_ID + " = :routeId"
-    )
-    fun getTripsListCursor(routeId: String?): Cursor?
+    )*/
+    @RawQuery
+    fun getTripsListCursor(qry: SupportSQLiteQuery): Cursor?
 }

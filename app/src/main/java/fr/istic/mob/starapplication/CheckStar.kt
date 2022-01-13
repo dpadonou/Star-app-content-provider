@@ -19,6 +19,7 @@ import android.app.NotificationManager
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.widget.Toast
 import androidx.core.content.getSystemService
+import fr.istic.mob.starapplication.database.StarDatabase
 
 
 class CheckStar : Service() {

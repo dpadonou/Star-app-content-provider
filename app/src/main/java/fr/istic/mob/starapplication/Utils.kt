@@ -2,6 +2,8 @@ package fr.istic.mob.starapplication
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
+import fr.istic.mob.starapplication.database.StarDatabase
 import java.io.File
 
 class Utils(var context: Context) {
@@ -23,6 +25,12 @@ class Utils(var context: Context) {
           fun removeQuotes(str: String): String {
                return str.replace("\"", "")
           }
+         /* fun getStop(){
+               val b = StarDatabase.getDatabase(activity.baseContext).stopsDAO()
+               val c = b.getStopsByLines("0003","1")
+               Log.i("","${c.toString()}")
+          }*/
 
      }
+
 }
