@@ -19,5 +19,10 @@ class Utils(var context: Context) {
                activity.finish()
           }
 
+          /**Enlevez les cotes présentes sur les valeurs**/
+          fun removeQuotes(str: String): String {
+               return str.replace("\"", "")
+          }
+
      }
 }

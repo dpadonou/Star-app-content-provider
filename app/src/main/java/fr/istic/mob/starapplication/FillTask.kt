@@ -154,13 +154,13 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val b = BusRoutes()
-                            b.routeId = fields[0]
-                            b.color = fields[7]
-                            b.description = fields[4]
-                            b.shortName = fields[2]
-                            b.longName = fields[3]
-                            b.textColor = fields[8]
-                            b.type = fields[5]
+                            b.routeId = Utils.removeQuotes(fields[0])
+                            b.color = Utils.removeQuotes(fields[7])
+                            b.description = Utils.removeQuotes(fields[4])
+                            b.shortName = Utils.removeQuotes(fields[2])
+                            b.longName = Utils.removeQuotes(fields[3])
+                            b.textColor = Utils.removeQuotes(fields[8])
+                            b.type = Utils.removeQuotes(fields[5])
                             entities.add(b)
                             if(entities.size == 1000 || count == l.size-1){
                                 val c = entities.toList()
@@ -181,16 +181,16 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val c = Calendar()
-                            c.serviceId = fields[0]
-                            c.monday = fields[1]
-                            c.tuesday = fields[2]
-                            c.wednesday = fields[3]
-                            c.thursday = fields[4]
-                            c.friday = fields[5]
-                            c.saturday = fields[6]
-                            c.sunday = fields[7]
-                            c.startDate = fields[8]
-                            c.endDate = fields[9]
+                            c.serviceId = Utils.removeQuotes(fields[0])
+                            c.monday = Utils.removeQuotes(fields[1])
+                            c.tuesday = Utils.removeQuotes(fields[2])
+                            c.wednesday = Utils.removeQuotes(fields[3])
+                            c.thursday = Utils.removeQuotes(fields[4])
+                            c.friday = Utils.removeQuotes(fields[5])
+                            c.saturday = Utils.removeQuotes(fields[6])
+                            c.sunday = Utils.removeQuotes(fields[7])
+                            c.startDate = Utils.removeQuotes(fields[8])
+                            c.endDate = Utils.removeQuotes(fields[9])
                             entities.add(c)
                             if(entities.size == 1000 || count == l.size-1){
                                 val cv = entities.toList()
@@ -211,13 +211,13 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val t = Trips()
-                            t.tripId =fields[2]
-                            t.routeId = fields[0]
-                            t.serviceId = fields[1]
-                            t.headSign = fields[3]
-                            t.directionId = fields[5]
-                            t.blockId = fields[6]
-                            t.wheelChairAccessible = fields[8]
+                            t.tripId =Utils.removeQuotes(fields[2])
+                            t.routeId = Utils.removeQuotes(fields[0])
+                            t.serviceId = Utils.removeQuotes(fields[1])
+                            t.headSign = Utils.removeQuotes(fields[3])
+                            t.directionId = Utils.removeQuotes(fields[5])
+                            t.blockId = Utils.removeQuotes(fields[6])
+                            t.wheelChairAccessible = Utils.removeQuotes(fields[8])
                             entities.add(t)
                             if(entities.size == 1000 || count == l.size-1){
                                 val c = entities.toList()
@@ -238,12 +238,12 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val s = Stops()
-                            s.stopId = fields[0]
-                            s.stopName = fields[2]
-                            s.description = fields[3]
-                            s.latitude = fields[4]
-                            s.longitutde = fields[5]
-                            s.wheelChairBoarding = fields[11]
+                            s.stopId = Utils.removeQuotes(fields[0])
+                            s.stopName = Utils.removeQuotes(fields[2])
+                            s.description = Utils.removeQuotes(fields[3])
+                            s.latitude = Utils.removeQuotes(fields[4])
+                            s.longitutde = Utils.removeQuotes(fields[5])
+                            s.wheelChairBoarding = Utils.removeQuotes(fields[11])
                             entities.add(s)
                             if(entities.size == 1000 || count == l.size-1){
                                 val c = entities.toList()
@@ -264,11 +264,11 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             count++
                             val fields = line.split(",").toTypedArray()
                             val st = StopTimes()
-                            st.tripId  = fields[0]
-                            st.arrivalTime = fields[1]
-                            st.departureTime = fields[2]
-                            st.stopId = fields[3]
-                            st.stopSequence = fields[4]
+                            st.tripId  = Utils.removeQuotes(fields[0])
+                            st.arrivalTime = Utils.removeQuotes(fields[1])
+                            st.departureTime = Utils.removeQuotes(fields[2])
+                            st.stopId = Utils.removeQuotes(fields[3])
+                            st.stopSequence = Utils.removeQuotes(fields[4])
                             entities.add(st)
                             if(entities.size == 1000 || count == l.size-1){
                                 val c = entities.toList()

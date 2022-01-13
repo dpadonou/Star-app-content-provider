@@ -71,7 +71,7 @@ class CheckStar : Service() {
                 val task = Downloadtask(this.baseContext,link,Utils(this.baseContext).zipName,path,application)
                 task.execute(0)
             }else{
-               // notifyMyApp(applicationContext,link,path)
+                notifyMyApp(applicationContext,link,path)
                  //Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link
