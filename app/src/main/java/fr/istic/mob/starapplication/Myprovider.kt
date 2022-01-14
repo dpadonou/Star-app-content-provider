@@ -97,13 +97,16 @@ class Myprovider : ContentProvider() {
             }
             QUERY_TRIPS -> {
                 val tripDao = StarDatabase.getDatabase(context!!).tripsDAO()
-                val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                /*val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                 + StarContract.Trips.TripColumns.TRIP_ID + ", "
                 + StarContract.Trips.TripColumns.HEADSIGN + ", "
                 + StarContract.Trips.TripColumns.DIRECTION_ID + ", "
                 + StarContract.Trips.TripColumns.ROUTE_ID +
                         " FROM " + StarContract.Trips.CONTENT_PATH +
-                        " WHERE " + StarContract.Trips.TripColumns.ROUTE_ID + " = '${selectionArgs?.get(0)}'")
+                        " WHERE " + StarContract.Trips.TripColumns.ROUTE_ID + " = '${selectionArgs?.get(0)}'")*/
+                val qry = SimpleSQLiteQuery("SELECT DISTINCT trip.trip_id,trip.trip_headsign,trip.direction_id,trip.route_id" +
+                        "                        FROM trip" +
+                        "                        WHERE trip.route_id = '${selectionArgs?.get(0)}'")
                 result = tripDao.getTripsListCursor(qry)
             }
             QUERY_CALENDAR -> {
@@ -112,7 +115,7 @@ class Myprovider : ContentProvider() {
             }
             QUERY_STOPS -> {
                 val stopsDao = StarDatabase.getDatabase(context!!).stopsDAO()
-                val qry = SimpleSQLiteQuery( "SELECT DISTINCT " +
+               /* val qry = SimpleSQLiteQuery( "SELECT DISTINCT " +
                         StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns._ID + ", " +
                         StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.STOP_ID + ", " +
                         StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.NAME + ", " +
@@ -124,11 +127,22 @@ class Myprovider : ContentProvider() {
                         StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.HEADSIGN + ", " +
                         StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.DIRECTION_ID +
                         " FROM " + StarContract.Stops.CONTENT_PATH + ", " + StarContract.StopTimes.CONTENT_PATH + ", " + StarContract.Trips.CONTENT_PATH +
-                        " WHERE " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.TRIP_ID + " = " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID +
-                        " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + " = " + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns._ID +
-                        " AND " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.ROUTE_ID + " ='${selectionArgs?.get(0)}' " +
-                        " AND " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.DIRECTION_ID + " ='${selectionArgs?.get(1)}' " +
-                        " ORDER BY " + StarContract.StopTimes.StopTimeColumns.DEPARTURE_TIME)
+                        " WHERE " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.TRIP_ID +
+                        " = " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID +
+                        " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID
+                        + " = " + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns._ID +
+                        " AND " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.ROUTE_ID + " = '0003' " +
+                        " AND " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.DIRECTION_ID + " = '1' " +
+                        " ORDER BY " + StarContract.StopTimes.StopTimeColumns.DEPARTURE_TIME)*/
+                val qry = SimpleSQLiteQuery( "SELECT DISTINCT stop.id,stop.stop_desc,stop.stop_id,stop.stop_lat,"
+                        +"stop.stop_lon,stop.stop_name,"
+                        +"trip.trip_headsign,trip.direction_id,trip.service_id,stop.wheelchair_boarding" +
+                        "                 FROM stop,stoptime,trip" +
+                        "                 WHERE trip.trip_id = stoptime.trip_id" +
+                        "                 AND stop.stop_id = stoptime.stop_id" +
+                        "                 AND trip.route_id = '${selectionArgs?.get(0)}'" +
+                        "                 AND trip.direction_id = '${selectionArgs?.get(1)}'" +
+                        "                 ORDER BY stoptime.departure_time")
                 result = stopsDao.getStopsByLines(qry)
             }
             QUERY_STOP_TIMES -> {
@@ -136,7 +150,7 @@ class Myprovider : ContentProvider() {
                 if(selectionArgs!!.size>2 && selectionArgs[3].isNotEmpty() ){
                     when (selectionArgs[3]){
                         StarContract.Calendar.CalendarColumns.MONDAY ->{
-                            val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                            /*val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + ", "
@@ -153,11 +167,22 @@ class Myprovider : ContentProvider() {
                                     + " AND " + StarContract.Calendar.CONTENT_PATH + "." + StarContract.Calendar.CalendarColumns.MONDAY + " = '1' "
                                     + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > '${selectionArgs[4]}'"
                                     + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
-                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
+                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)*/
+                            val qry = SimpleSQLiteQuery("SELECT DISTINCT  stoptime.trip_id,stoptime.stop_id,stoptime.arrival_time,stoptime.departure_time," +
+                                    "                 stoptime.stop_sequence,trip.id,trip.trip_headsign,trip.trip_id" +
+                                    "                 FROM stoptime,trip,calendar" +
+                                    "                 WHERE stoptime.trip_id = trip.trip_id" +
+                                    "                 AND trip.service_id = calendar.service_id" +
+                                    "                 AND trip.route_id = '${selectionArgs[0]}'" +
+                                    "                 AND stoptime.stop_id = '${selectionArgs[1]}'" +
+                                    "                 AND trip.direction_id = '${selectionArgs[2]}'" +
+                                    "                 AND calendar.monday = '1'" +
+                                    "                 AND stoptime.arrival_time > '${selectionArgs[4]}'" +
+                                    "                 GROUP BY stoptime.arrival_time")
                             result = stopTimesDao.getStopTimeCursorMonday(qry)
                         }
                         StarContract.Calendar.CalendarColumns.TUESDAY ->{
-                            val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                            /*val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + ", "
@@ -174,11 +199,22 @@ class Myprovider : ContentProvider() {
                                     + " AND " + StarContract.Calendar.CONTENT_PATH + "." + StarContract.Calendar.CalendarColumns.TUESDAY + " = '1' "
                                     + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > '${selectionArgs[4]}'"
                                     + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
-                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
+                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)*/
+                            val qry = SimpleSQLiteQuery("SELECT DISTINCT  stoptime.trip_id,stoptime.stop_id,stoptime.arrival_time,stoptime.departure_time," +
+                                    "                 stoptime.stop_sequence,trip.id,trip.trip_headsign,trip.trip_id" +
+                                    "                 FROM stoptime,trip,calendar" +
+                                    "                 WHERE stoptime.trip_id = trip.trip_id" +
+                                    "                 AND trip.service_id = calendar.service_id" +
+                                    "                 AND trip.route_id = '${selectionArgs[0]}'" +
+                                    "                 AND stoptime.stop_id = '${selectionArgs[1]}'" +
+                                    "                 AND trip.direction_id = '${selectionArgs[2]}'" +
+                                    "                 AND calendar.tuesday = '1'" +
+                                    "                 AND stoptime.arrival_time > '${selectionArgs[4]}'" +
+                                    "                 GROUP BY stoptime.arrival_time")
                             result = stopTimesDao.getStopTimeCursorTuesday(qry)
                         }
                         StarContract.Calendar.CalendarColumns.WEDNESDAY ->{
-                            val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                            /*val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + ", "
@@ -195,11 +231,22 @@ class Myprovider : ContentProvider() {
                                     + " AND " + StarContract.Calendar.CONTENT_PATH + "." + StarContract.Calendar.CalendarColumns.WEDNESDAY + " = '1' "
                                     + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > '${selectionArgs[4]}'"
                                     + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
-                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
+                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)*/
+                            val qry = SimpleSQLiteQuery("SELECT DISTINCT  stoptime.trip_id,stoptime.stop_id,stoptime.arrival_time,stoptime.departure_time," +
+                                    "                 stoptime.stop_sequence,trip.id,trip.trip_headsign,trip.trip_id" +
+                                    "                 FROM stoptime,trip,calendar" +
+                                    "                 WHERE stoptime.trip_id = trip.trip_id" +
+                                    "                 AND trip.service_id = calendar.service_id" +
+                                    "                 AND trip.route_id = '${selectionArgs[0]}'" +
+                                    "                 AND stoptime.stop_id = '${selectionArgs[1]}'" +
+                                    "                 AND trip.direction_id = '${selectionArgs[2]}'" +
+                                    "                 AND calendar.wednesday = '1'" +
+                                    "                 AND stoptime.arrival_time > '${selectionArgs[4]}'" +
+                                    "                 GROUP BY stoptime.arrival_time")
                             result = stopTimesDao.getStopTimeCursorWenesday(qry)
                         }
                         StarContract.Calendar.CalendarColumns.THURSDAY ->{
-                            val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                           /* val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + ", "
@@ -216,11 +263,22 @@ class Myprovider : ContentProvider() {
                                     + " AND " + StarContract.Calendar.CONTENT_PATH + "." + StarContract.Calendar.CalendarColumns.THURSDAY + " = '1' "
                                     + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > '${selectionArgs[4]}'"
                                     + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
-                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
+                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)*/
+                            val qry = SimpleSQLiteQuery("SELECT DISTINCT  stoptime.trip_id,stoptime.stop_id,stoptime.arrival_time,stoptime.departure_time," +
+                                    "                 stoptime.stop_sequence,trip.id,trip.trip_headsign,trip.trip_id" +
+                                    "                 FROM stoptime,trip,calendar" +
+                                    "                 WHERE stoptime.trip_id = trip.trip_id" +
+                                    "                 AND trip.service_id = calendar.service_id" +
+                                    "                 AND trip.route_id = '${selectionArgs[0]}'" +
+                                    "                 AND stoptime.stop_id = '${selectionArgs[1]}'" +
+                                    "                 AND trip.direction_id = '${selectionArgs[2]}'" +
+                                    "                 AND calendar.thursday = '1'" +
+                                    "                 AND stoptime.arrival_time > '${selectionArgs[4]}'" +
+                                    "                 GROUP BY stoptime.arrival_time")
                             result = stopTimesDao.getStopTimeCursorThursday(qry)
                         }
                         StarContract.Calendar.CalendarColumns.FRIDAY ->{
-                            val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                            /*val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + ", "
@@ -237,11 +295,22 @@ class Myprovider : ContentProvider() {
                                     + " AND " + StarContract.Calendar.CONTENT_PATH + "." + StarContract.Calendar.CalendarColumns.FRIDAY + " = '1' "
                                     + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > '${selectionArgs[4]}'"
                                     + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
-                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
+                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)*/
+                            val qry = SimpleSQLiteQuery("SELECT DISTINCT  stoptime.trip_id,stoptime.stop_id,stoptime.arrival_time,stoptime.departure_time," +
+                                    "                 stoptime.stop_sequence,trip.id,trip.trip_headsign,trip.trip_id" +
+                                    "                 FROM stoptime,trip,calendar" +
+                                    "                 WHERE stoptime.trip_id = trip.trip_id" +
+                                    "                 AND trip.service_id = calendar.service_id" +
+                                    "                 AND trip.route_id = '${selectionArgs[0]}'" +
+                                    "                 AND stoptime.stop_id = '${selectionArgs[1]}'" +
+                                    "                 AND trip.direction_id = '${selectionArgs[2]}'" +
+                                    "                 AND calendar.friday = '1'" +
+                                    "                 AND stoptime.arrival_time > '${selectionArgs[4]}'" +
+                                    "                 GROUP BY stoptime.arrival_time")
                             result = stopTimesDao.getStopTimeCursorFriday(qry)
                         }
                         StarContract.Calendar.CalendarColumns.SATURDAY ->{
-                            val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                            /*val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + ", "
@@ -258,11 +327,22 @@ class Myprovider : ContentProvider() {
                                     + " AND " + StarContract.Calendar.CONTENT_PATH + "." + StarContract.Calendar.CalendarColumns.SATURDAY + " = '1' "
                                     + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > '${selectionArgs[4]}'"
                                     + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
-                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
+                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)*/
+                            val qry = SimpleSQLiteQuery("SELECT DISTINCT  stoptime.trip_id,stoptime.stop_id,stoptime.arrival_time,stoptime.departure_time," +
+                                    "                 stoptime.stop_sequence,trip.id,trip.trip_headsign,trip.trip_id" +
+                                    "                 FROM stoptime,trip,calendar" +
+                                    "                 WHERE stoptime.trip_id = trip.trip_id" +
+                                    "                 AND trip.service_id = calendar.service_id" +
+                                    "                 AND trip.route_id = '${selectionArgs[0]}'" +
+                                    "                 AND stoptime.stop_id = '${selectionArgs[1]}'" +
+                                    "                 AND trip.direction_id = '${selectionArgs[2]}'" +
+                                    "                 AND calendar.saturday = '1'" +
+                                    "                 AND stoptime.arrival_time > '${selectionArgs[4]}'" +
+                                    "                 GROUP BY stoptime.arrival_time")
                             result = stopTimesDao.getStopTimeCursorSaturday(qry)
                         }
                         StarContract.Calendar.CalendarColumns.SUNDAY ->{
-                            val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                            /*val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + ", "
                                     + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + ", "
@@ -279,7 +359,18 @@ class Myprovider : ContentProvider() {
                                     + " AND " + StarContract.Calendar.CONTENT_PATH + "." + StarContract.Calendar.CalendarColumns.SUNDAY + " = '1' "
                                     + " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > '${selectionArgs[4]}'"
                                     + " GROUP BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME
-                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
+                                    + " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)*/
+                            val qry = SimpleSQLiteQuery("SELECT DISTINCT  stoptime.trip_id,stoptime.stop_id,stoptime.arrival_time,stoptime.departure_time," +
+                                    "                 stoptime.stop_sequence,trip.id,trip.trip_headsign,trip.trip_id" +
+                                    "                 FROM stoptime,trip,calendar" +
+                                    "                 WHERE stoptime.trip_id = trip.trip_id" +
+                                    "                 AND trip.service_id = calendar.service_id" +
+                                    "                 AND trip.route_id = '${selectionArgs[0]}'" +
+                                    "                 AND stoptime.stop_id = '${selectionArgs[1]}'" +
+                                    "                 AND trip.direction_id = '${selectionArgs[2]}'" +
+                                    "                 AND calendar.sunday = '1'" +
+                                    "                 AND stoptime.arrival_time > '${selectionArgs[4]}'" +
+                                    "                 GROUP BY stoptime.arrival_time")
                             result = stopTimesDao.getStopTimeCursorSunday(qry)
                         }
                     }
@@ -287,27 +378,37 @@ class Myprovider : ContentProvider() {
             }
             QUERY_ROUTES_DETAILS -> {
                 val stopTimesDao = StarDatabase.getDatabase(context!!).stopTimesDAO()
-                val qry = SimpleSQLiteQuery("SELECT DISTINCT "
+                /*val qry = SimpleSQLiteQuery("SELECT DISTINCT "
                         + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.NAME + ", "
                         + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME +
                         " FROM " + StarContract.StopTimes.CONTENT_PATH + ", " + StarContract.Stops.CONTENT_PATH +
                         " WHERE " + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.STOP_ID + "=" + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID +
                         " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID + " = '${selectionArgs?.get(0)}'" +
                         " AND " + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME + " > '${selectionArgs?.get(1)}'" +
-                        " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)
+                        " ORDER BY " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.ARRIVAL_TIME)*/
+                val qry = SimpleSQLiteQuery("SELECT DISTINCT stop.stop_name,stoptime.arrival_time" +
+                        "                        FROM stoptime,stop" +
+                        "                        WHERE stop.stop_id=stoptime.stop_id" +
+                        "                        AND stoptime.trip_id = '${selectionArgs?.get(0)}'" +
+                        "                        AND stoptime.arrival_time > '${selectionArgs?.get(1)}'" +
+                        "                        ORDER BY stoptime.arrival_time")
                 result = stopTimesDao.getRouteDetail(qry)
             }
             QUERY_SEARCHED_STOPS -> {
-                val qry = SimpleSQLiteQuery("SELECT DISTINCT " +
+                /*val qry = SimpleSQLiteQuery("SELECT DISTINCT " +
                         StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.NAME +
                         " FROM " + StarContract.Stops.CONTENT_PATH +
                         " WHERE " + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.NAME +
-                        " LIKE '${selectionArgs?.get(0)}' || '%' ORDER BY " + StarContract.Stops.StopColumns.NAME + " ASC")
+                        " LIKE '${selectionArgs?.get(0)}' || '%' ORDER BY " + StarContract.Stops.StopColumns.NAME + " ASC")*/
+                val qry = SimpleSQLiteQuery("SELECT DISTINCT stop.stop_name" +
+                        "                        FROM stop" +
+                        "                        WHERE stop.stop_name" +
+                        "                        LIKE '${selectionArgs?.get(0)}' || '%' ORDER BY stop.stop_name ASC")
                 val stopsDao = StarDatabase.getDatabase(context!!).stopsDAO()
                 result = stopsDao.getSearchedStops(qry)
             }
             QUERY_ROUTES_FOR_STOP -> {
-                val qry = SimpleSQLiteQuery("SELECT DISTINCT " +
+               /* val qry = SimpleSQLiteQuery("SELECT DISTINCT " +
                         StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns._ID + ", " +
                         StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns.ROUTE_ID+", "+
                         StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns.SHORT_NAME + ", " +
@@ -321,7 +422,16 @@ class Myprovider : ContentProvider() {
                         " AND " + StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns.ROUTE_ID + "= " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.ROUTE_ID +
                         " AND " + StarContract.Trips.CONTENT_PATH + "." + StarContract.Trips.TripColumns.TRIP_ID + "= " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.TRIP_ID +
                         " AND " + StarContract.StopTimes.CONTENT_PATH + "." + StarContract.StopTimes.StopTimeColumns.STOP_ID + "= " + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.STOP_ID +
-                        " ORDER BY " + StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns._ID)
+                        " ORDER BY " + StarContract.BusRoutes.CONTENT_PATH + "." + StarContract.BusRoutes.BusRouteColumns._ID)*/
+                val qry = SimpleSQLiteQuery("SELECT DISTINCT busroute._id,busroute.route_id,busroute.route_short_name,"
+                        +"busroute.route_long_name,"
+                        +"busroute.route_color,busroute.route_text_color,busroute.route_desc,busroute.route_type" +
+                        "                        FROM busroute,trip,stop,stoptime" +
+                        "                        WHERE stop.stop_name= '${selectionArgs?.get(0)}'" +
+                        "                        AND busroute.route_id = trip.route_id" +
+                        "                        AND trip.trip_id = stoptime.trip_id" +
+                        "                        AND stoptime.stop_id = stop.stop_id" +
+                        "                        ORDER BY busroute._id")
                 val busRouteDao = StarDatabase.getDatabase(context!!).busRoutesDAO()
                 result = busRouteDao.getRoutesForStop(qry)
             }
