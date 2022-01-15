@@ -54,10 +54,10 @@ class Downloadtask: AsyncTask<Int, Int, Boolean> {
     }
 
     override fun doInBackground(vararg params: Int?): Boolean {
-        Log.i("","Debut du télechargement")
+        //Log.i("","Debut du télechargement")
         sendProgress()
         downloadZip(url,fileName,path)
-        Log.i("","Fin du télechargement")
+        //Log.i("","Fin du télechargement")
        return true
     }
     private fun sendProgress(){
@@ -71,11 +71,11 @@ class Downloadtask: AsyncTask<Int, Int, Boolean> {
         }
         /**Creation de la notification en elle même **/
         val content = ""
-        builder.setContentTitle("File downloading")
+        builder.setContentTitle(context.getString(R.string.downloading_text))
             .setColor(ContextCompat.getColor(context,R.color.teal_200))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(content).setBigContentTitle("File downloading"))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(content).setBigContentTitle(context.getString(R.string.downloading_text)))
             .setAutoCancel(false)
             .setProgress(100,0,false)
             .setChannelId(CHANNEL_ID)
@@ -89,8 +89,8 @@ class Downloadtask: AsyncTask<Int, Int, Boolean> {
     }
 
     override fun onPostExecute(result: Boolean?) {
-        nM.cancel(1)
-        Toast.makeText(context,"Telechargement des fichiers terminé",Toast.LENGTH_LONG).show()
+       // nM.cancel(1)
+       // Toast.makeText(context,"Telechargement des fichiers terminé",Toast.LENGTH_LONG).show()
     }
 
     private fun downloadZip(url: String, fileName: String, path: String) {
@@ -114,29 +114,16 @@ class Downloadtask: AsyncTask<Int, Int, Boolean> {
                     progressBarProgress = 100
                     println("progressBarMax : ${progressBarMax} --- progressBarProgress : ${progressBarProgress}")
                     println("Download success full")
-                    Toast.makeText(context,"Tous les fichiers ont bien été télechargé.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,context.getString(R.string.download_finish), Toast.LENGTH_LONG).show()
                     nM.cancel(1)
-                    Toast.makeText(context,"Telechargement des fichiers terminé",Toast.LENGTH_LONG).show()
-                    /* val target = Utils(context).directoryPath + Utils(context).separator + Utils(context).zipName
-                     val extract = ExtractFile(context)
-                     extract.extract(target,Utils(context).directoryPath)
-                     Log.i("","Extraction terminée")*/
-                    /* val intent = Intent(context, DatabaseFiller::class.java)
-                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                         context.startForegroundService(intent)
-                     } else {
-                         context.startService(intent)
-                     }*/
-                    //context.startService(intent)
+                   Utils.displayDialogMessage(context.getString(R.string.dialog_msg))
+                    //Toast.makeText(context,"Telechargement des fichiers terminé",Toast.LENGTH_LONG).show()
                     DatabaseFill.scheduleJob(context)
-                    //val task = FillTask(context, application)
-                    //task.execute(1)
                 }
 
                 override fun onError(error: com.downloader.Error?) {
-                    print("Failed to download the $url")
-                    Log.i("", "Erreur du telechargement")
-                    Toast.makeText(context,"Erreur de telechargement", Toast.LENGTH_LONG).show()
+                    Log.i("", context.getString(R.string.download_error_text))
+                    Toast.makeText(context,context.getString(R.string.download_error_text), Toast.LENGTH_LONG).show()
                     nM.cancel(1)
                     //Toast.makeText(context,"Telechargement des fichiers terminé",Toast.LENGTH_LONG).show()
                 }

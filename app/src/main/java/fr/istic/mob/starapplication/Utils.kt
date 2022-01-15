@@ -1,5 +1,6 @@
 package fr.istic.mob.starapplication
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Environment
 import android.util.Log
@@ -19,6 +20,16 @@ class Utils(var context: Context) {
           }
           fun stopActivity(){
                activity.finish()
+          }
+
+          fun displayDialogMessage(str:String){
+               val builder = AlertDialog.Builder(activity)
+               builder.setTitle("Star1Dp message")
+               builder.setMessage(str)
+               builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+                   //Utils.stopActivity()
+               }
+            builder.show()
           }
 
           /**Enlevez les cotes présentes sur les valeurs**/

@@ -43,8 +43,9 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
     override fun doInBackground(vararg params: Int?): Boolean{
         val target = Utils(context).directoryPath + Utils(context).separator+ Utils(context).zipName
         sendProgress()
+        //Toast.makeText(Utils.getActivity(),"Debut de l'extraction",Toast.LENGTH_LONG).show()
         extract(target,Utils(context).directoryPath)
-        Log.i("","Extraction terminée")
+        //Toast.makeText(Utils.getActivity(),"Extraction terminée et début du remplissage de la base",Toast.LENGTH_LONG).show()
         fillDatabase()
         Log.i("","Fin du remplissage")
         Utils.stopActivity()
@@ -67,16 +68,10 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
     private fun fillDatabase(){
         Log.i("","Debut du remplissage")
         for (s:String in Utils(context).files){
-            // progression.builder.setProgress(1,1,true)
-            //this.publishProgress(1)
             getEntitiesFromFile(s,Utils(context).directoryPath)
-            /* if (s == Utils(applicationContext).files[Utils(applicationContext).files.size-1]){
-                 progression.nM.cancel(1)
-                 Toast.makeText(applicationContext,"Fin du remplissage de la base", Toast.LENGTH_LONG).show()
-             }*/
         }
         nM.cancel(1)
-       // Toast.makeText(context,"Extraction et remplissage de la base terminée", Toast.LENGTH_LONG).show()
+        Log.i("","   ")
     }
     private fun sendProgress(){
         /** Création de la chaine pour la notification **/
@@ -89,11 +84,11 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
         }
         /**Creation de la notification en elle même **/
         val content = ""
-        builder.setContentTitle("Database filling")
+        builder.setContentTitle(context.getString(R.string.filling_text))
             .setColor(ContextCompat.getColor(context,R.color.teal_200))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(content).setBigContentTitle("Database filling"))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(content).setBigContentTitle(context.getString(R.string.filling_text)))
             .setAutoCancel(false)
             .setProgress(100,0,false)
             .setChannelId(CHANNEL_ID)
@@ -166,13 +161,15 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             if(entities.size == 1000 || count == l.size-1){
                                 val c = entities.toList()
                                 Log.i("","Ajout de $count élements de busRoutes")
+                               // Toast.makeText(Utils.getActivity(),"Ajout de $count élements de busRoutes",Toast.LENGTH_LONG).show()
                                 bV.addAllBusRoute(c)
                                 entities.clear()
+                                this.publishProgress(1)
                             }
                         }
                     }
                     Utils(context).files[1] -> {
-                        this.publishProgress(1)
+                        //this.publishProgress(1)
                         //calendar
                         val entities = ArrayList<Calendar>()
                         val cV = CalendarViewModel(application)
@@ -196,8 +193,10 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             if(entities.size == 1000 || count == l.size-1){
                                 val cv = entities.toList()
                                 Log.i("","Ajout de $count élements de calendar")
+                                //Toast.makeText(Utils.getActivity(),"Ajout de $count élements de calendar",Toast.LENGTH_LONG).show()
                                 cV.addAllCalendar(cv)
                                 entities.clear()
+                                this.publishProgress(1)
                             }
                         }
                     }
@@ -223,8 +222,10 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             if(entities.size == 1000 || count == l.size-1){
                                 val c = entities.toList()
                                 Log.i("","Ajout de $count élements de trips")
+                                //Toast.makeText(Utils.getActivity(),"Ajout de $count élements de trips",Toast.LENGTH_LONG).show()
                                 tV.addAllTrips(c)
                                 entities.clear()
+                                this.publishProgress(1)
                             }
                         }
                     }
@@ -249,14 +250,16 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             if(entities.size == 1000 || count == l.size-1){
                                 val c = entities.toList()
                                 Log.i("","Ajout de $count élements de stops")
+                                //Toast.makeText(Utils.getActivity(),"Ajout de $count élements de stops",Toast.LENGTH_LONG).show()
                                 sV.addAllBStops(c)
                                 entities.clear()
+                                this.publishProgress(1)
                             }
                         }
                     }
                     Utils(context).files[4] -> {
                         //stops_times
-                        this.publishProgress(1)
+                        //this.publishProgress(1)
                         val stV = StopTimesViewModel(application)
                         stV.deleteAllStopTimes()
                         val entities = ArrayList<StopTimes>()
@@ -274,8 +277,10 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
                             if(entities.size == 1000 || count == l.size-1){
                                 val c = entities.toList()
                                 Log.i("","Ajout de $count élements de stopsTimes")
+                               // Toast.makeText(Utils.getActivity(),"Ajout de $count élements de stops",Toast.LENGTH_LONG).show()
                                 stV.addAllStopTimes(c)
                                 entities.clear()
+                                this.publishProgress(1)
                             }
                         }
                     }

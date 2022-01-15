@@ -1,15 +1,21 @@
 <resources>
     <string name="app_name">Star1DP</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="check_for_updates">check for updates</string>
+    <string name="check_for_updates">Verifiez pour les mises à jour</string>
     <string name="description">description</string>
-    <string name="longname">longName</string>
-    <string name="shortname">shortName</string>
-    <string name="save_busroutes">Save BusRoutes</string>
+    <string name="longname">Prénoms</string>
+    <string name="shortname">Nom</string>
+    <string name="save_busroutes">Sauvegarder une ligne de bus</string>
     <string name="horaires">Horaires</string>
     <string name="liste_des_lignes">liste des lignes</string>
-    <string name="terminusChooserText">chooseTermiuns</string>
+    <string name="terminusChooserText">choisissez un terminus</string>
     <string name="dateChooserText">04 Decembre 2021</string>
     <string name="hour">20 : 27</string>
     <string name="zip_download_title">Telechargement</string>
+    <string name="download_error_text">Erreur du telechargement</string>
+    <string name="download_finish">Tous les fichiers ont bien été télechargé.</string>
+    <string name="dialog_msg">Telechargement des fichiers terminée.
+                              Le remplissage de la base a débutée et fermera l'application à son achèvement</string>
+    <string name="downloading_text">Telechargement des fichiers</string>
+    <string name="filling_text">Remplissage de la base de données</string>
 </resources>
