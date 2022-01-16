@@ -72,7 +72,7 @@ class CheckStar : Service() {
                 val task = Downloadtask(this.baseContext,link,Utils(this.baseContext).zipName,path,application)
                 task.execute(0)
             }else{
-                notifyMyApp(applicationContext,link,path)
+                //notifyMyApp(applicationContext,link,path)
                  //Log.i("link", link)
                 if(oldLink != link){
                     oldLink = link
@@ -104,8 +104,8 @@ class CheckStar : Service() {
         }
         /**Creation de la notification en elle même **/
         val builder = NotificationCompat.Builder(context,CHANNEL_ID)
-        val content = "Cliquez pour télécharger"
-        val title = "Mise à jour disponible"
+        val content = getString(R.string.download_click)
+        val title = getString(R.string.new_version)
         builder.setContentTitle(title)
             .setColor(ContextCompat.getColor(context,R.color.teal_200))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
