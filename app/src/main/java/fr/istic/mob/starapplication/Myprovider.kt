@@ -400,7 +400,7 @@ class Myprovider : ContentProvider() {
                         " FROM " + StarContract.Stops.CONTENT_PATH +
                         " WHERE " + StarContract.Stops.CONTENT_PATH + "." + StarContract.Stops.StopColumns.NAME +
                         " LIKE '${selectionArgs?.get(0)}' || '%' ORDER BY " + StarContract.Stops.StopColumns.NAME + " ASC")*/
-                val qry = SimpleSQLiteQuery("SELECT DISTINCT stop.stop_name" +
+                val qry = SimpleSQLiteQuery("SELECT stop.id,stop_id,stop.stop_desc,stop.stop_lat, stop.stop_lon,stop.stop_name,stop.wheelchair_boarding" +
                         "                        FROM stop" +
                         "                        WHERE stop.stop_name" +
                         "                        LIKE '${selectionArgs?.get(0)}' || '%' ORDER BY stop.stop_name ASC")
