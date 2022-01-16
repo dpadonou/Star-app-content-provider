@@ -88,6 +88,7 @@ class FillTask: AsyncTask<Int, Int, Boolean> {
             .setColor(ContextCompat.getColor(context,R.color.teal_200))
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)
+            .setSilent(true)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content).setBigContentTitle(context.getString(R.string.filling_text)))
             .setAutoCancel(false)
             .setProgress(100,0,false)
