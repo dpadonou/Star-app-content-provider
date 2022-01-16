@@ -18,4 +18,6 @@
                               Le remplissage de la base a débutée et fermera l\'application à son achèvement</string>
     <string name="downloading_text">Telechargement des fichiers</string>
     <string name="filling_text">Remplissage de la base de données</string>
+    <string name="download_click">Cliquez pour télécharger</string>
+    <string name="new_version">Mise à jour disponible</string>
 </resources>

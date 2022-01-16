@@ -19,4 +19,6 @@
                               The filling of the database has started and will close the application at its completion</string>
     <string name="downloading_text">File downloading</string>
     <string name="filling_text">Filling of database</string>
+    <string name="download_click">Click for download</string>
+    <string name="new_version">New files available</string>
 </resources>
